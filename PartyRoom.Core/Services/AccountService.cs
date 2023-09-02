@@ -10,6 +10,7 @@ namespace PartyRoom.Core.Services
     {
         private readonly IRepository<RefreshToken> _refreshTokenRepository;
         private readonly IUserRepository _userRepository;
+       
         private readonly SignInManager<ApplicationUser> _signInManager;
         public AccountService(IRepository<RefreshToken> refreshTokenRepository,
             IUserRepository userRepository, SignInManager<ApplicationUser> signInManager)

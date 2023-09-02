@@ -4,6 +4,7 @@ using PartyRoom.Infrastructure.Data;
 using PartyRoom.WebAPI.Extensions;
 using PartyRoom.WebAPI.Helpers;
 using PartyRoom.WebAPI.MappingProfiles;
+using PartyRoom.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>();
@@ -19,7 +20,7 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Your API", Version = "v1" });
 
-    // Добавьте описание для авторизации JWT
+    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ JWT
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
@@ -43,9 +44,7 @@ builder.Services.AddSwaggerGen(c =>
             }
         });
 });
-
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-        options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("PartyRoom.Infrastructure")));
+builder.Services.AddInfrastructure(builder.Configuration);
 
 builder.Services.AddAutoMapper(typeof(UserMappingProfile),typeof(RoomMappingProfile));
 builder.Services.AddRepositories();

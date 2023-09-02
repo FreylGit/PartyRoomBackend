@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace PartyRoom.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class AddBlogCreatedTimestamp : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -256,8 +256,8 @@ namespace PartyRoom.Infrastructure.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { new Guid("eac639ec-c125-4cec-8ffc-15148bb5a884"), null, "User", "USER" },
-                    { new Guid("fe25774a-1c61-491c-b22e-3fe4c06472b6"), null, "Admin", "ADMIN" }
+                    { new Guid("28e72510-fc5a-47aa-9c9d-8ece7d98da48"), null, "User", "USER" },
+                    { new Guid("db4d6586-ccb3-4f4b-ad16-acf73eaedf90"), null, "Admin", "ADMIN" }
                 });
 
             migrationBuilder.CreateIndex(

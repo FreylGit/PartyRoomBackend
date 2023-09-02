@@ -155,13 +155,13 @@ namespace PartyRoom.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("fe25774a-1c61-491c-b22e-3fe4c06472b6"),
+                            Id = new Guid("db4d6586-ccb3-4f4b-ad16-acf73eaedf90"),
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = new Guid("eac639ec-c125-4cec-8ffc-15148bb5a884"),
+                            Id = new Guid("28e72510-fc5a-47aa-9c9d-8ece7d98da48"),
                             Name = "User",
                             NormalizedName = "USER"
                         });
