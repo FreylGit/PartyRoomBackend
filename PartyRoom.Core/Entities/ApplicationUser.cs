@@ -12,6 +12,6 @@ namespace PartyRoom.Core.Entities
         public UserProfile? UserProfile { get; set; }
         public ICollection<Room> CreatedRooms { get; set; }
         public ICollection<UserRoom> UserRoom { get; set; }
-
+        public ICollection<Tag> Tags { get; set; } = new List<Tag>();
     }
 }

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using PartyRoom.Core.Constants;
+using PartyRoom.Core.DTOs.Tag;
 using PartyRoom.Core.DTOs.User;
 using PartyRoom.Core.Entities;
 
@@ -24,6 +25,9 @@ namespace PartyRoom.WebAPI.MappingProfiles
             CreateMap<ApplicationUser,UserPublicDTO>()
                 .ForMember(dest => dest.FirtsName, opt => opt.MapFrom(src => src.FirstName))
                 .ForMember(dest => dest.Details, opt => opt.MapFrom(src => src.UserProfile));
+
+            CreateMap<TagCreateDTO, Tag>();
+            CreateMap<Tag, TagDTO>();
 
         }
     }

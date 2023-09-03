@@ -10,6 +10,9 @@ namespace PartyRoom.Infrastructure.Data
         public DbSet<RefreshToken> RefreshTokens { get; set; }
         public DbSet<Room> Rooms { get; set; }
         public DbSet<UserRoom> UserRoom { get; set; }
+
+        public DbSet<Tag> Tags { get; set; }
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {

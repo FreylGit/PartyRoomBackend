@@ -39,7 +39,7 @@ namespace PartyRoom.Core.Services
                 //ApplicationUser = userMap,
                 ApplicationUserId = userMap.Id,
                 About = userMap.PhoneNumber,
-                ImagePath = "https://web-zoopark.ru/wp-content/uploads/2018/07/2-278.jpg"
+                ImagePath = ""
             });
             await _profileRepository.SaveChangesAsync();
 

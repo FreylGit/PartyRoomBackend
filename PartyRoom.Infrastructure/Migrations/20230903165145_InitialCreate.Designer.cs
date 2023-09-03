@@ -12,8 +12,8 @@ using PartyRoom.Infrastructure.Data;
 namespace PartyRoom.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230902125546_AddBlogCreatedTimestamp")]
-    partial class AddBlogCreatedTimestamp
+    [Migration("20230903165145_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -158,13 +158,13 @@ namespace PartyRoom.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("db4d6586-ccb3-4f4b-ad16-acf73eaedf90"),
+                            Id = new Guid("9d0cad9b-db68-465e-8f44-a57a1f7cba49"),
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = new Guid("28e72510-fc5a-47aa-9c9d-8ece7d98da48"),
+                            Id = new Guid("52172b89-9445-4d04-b1a7-9ba19e6c8049"),
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -310,6 +310,29 @@ namespace PartyRoom.Infrastructure.Migrations
                     b.ToTable("Rooms");
                 });
 
+            modelBuilder.Entity("PartyRoom.Core.Entities.Tag", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ApplicationUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("Important")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.ToTable("Tags");
+                });
+
             modelBuilder.Entity("PartyRoom.Core.Entities.UserProfile", b =>
                 {
                     b.Property<Guid>("ApplicationUserId")
@@ -417,6 +440,17 @@ namespace PartyRoom.Infrastructure.Migrations
                     b.Navigation("Author");
                 });
 
+            modelBuilder.Entity("PartyRoom.Core.Entities.Tag", b =>
+                {
+                    b.HasOne("PartyRoom.Core.Entities.ApplicationUser", "ApplicationUser")
+                        .WithMany("Tags")
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
+                });
+
             modelBuilder.Entity("PartyRoom.Core.Entities.UserProfile", b =>
                 {
                     b.HasOne("PartyRoom.Core.Entities.ApplicationUser", null)
@@ -451,6 +485,8 @@ namespace PartyRoom.Infrastructure.Migrations
 
                     b.Navigation("RefreshToken")
                         .IsRequired();
+
+                    b.Navigation("Tags");
 
                     b.Navigation("UserProfile");
 

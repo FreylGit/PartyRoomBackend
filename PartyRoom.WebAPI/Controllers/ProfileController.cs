@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PartyRoom.Core.Constants;
+using PartyRoom.Core.DTOs.Tag;
+using PartyRoom.Core.Entities;
 using PartyRoom.Core.Interfaces.Services;
 using PartyRoom.Infrastructure.Data;
 using PartyRoom.WebAPI.Services;
@@ -46,5 +48,22 @@ namespace PartyRoom.WebAPI.Controllers
              await _profileService.UpdateImageAsync(userId, image);
             return Ok();
         }
+
+        [HttpPost("AddTag")]
+        public async Task<IActionResult>AddTag(TagCreateDTO tag)
+        {
+            var userId = _jwtService.GetUserIdByToken(HttpContext);
+            await  _profileService.AddTagAsync(userId,tag);
+            return Ok();
+        }
+
+        [HttpDelete("DeleteTag")]
+        public async Task<IActionResult> DeleteTag(Guid tagId)
+        {
+            var userId = _jwtService.GetUserIdByToken(HttpContext);
+            await _profileService.DeleteTagAsync(userId, tagId);
+            return Ok();
+        }
+
     }
 }

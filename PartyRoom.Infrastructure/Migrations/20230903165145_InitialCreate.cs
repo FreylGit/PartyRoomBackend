@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace PartyRoom.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class AddBlogCreatedTimestamp : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -208,6 +208,26 @@ namespace PartyRoom.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Tags",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Important = table.Column<bool>(type: "bit", nullable: false),
+                    ApplicationUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tags", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Tags_AspNetUsers_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UserProfiles",
                 columns: table => new
                 {
@@ -256,8 +276,8 @@ namespace PartyRoom.Infrastructure.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { new Guid("28e72510-fc5a-47aa-9c9d-8ece7d98da48"), null, "User", "USER" },
-                    { new Guid("db4d6586-ccb3-4f4b-ad16-acf73eaedf90"), null, "Admin", "ADMIN" }
+                    { new Guid("52172b89-9445-4d04-b1a7-9ba19e6c8049"), null, "User", "USER" },
+                    { new Guid("9d0cad9b-db68-465e-8f44-a57a1f7cba49"), null, "Admin", "ADMIN" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -305,6 +325,11 @@ namespace PartyRoom.Infrastructure.Migrations
                 column: "AuthorId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Tags_ApplicationUserId",
+                table: "Tags",
+                column: "ApplicationUserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_UserRoom_RoomId",
                 table: "UserRoom",
                 column: "RoomId");
@@ -330,6 +355,9 @@ namespace PartyRoom.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "RefreshTokens");
+
+            migrationBuilder.DropTable(
+                name: "Tags");
 
             migrationBuilder.DropTable(
                 name: "UserProfiles");

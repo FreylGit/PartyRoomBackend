@@ -1,4 +1,7 @@
-﻿namespace PartyRoom.Core.DTOs.User
+﻿using PartyRoom.Core.DTOs.Tag;
+using PartyRoom.Core.Entities;
+
+namespace PartyRoom.Core.DTOs.User
 {
     public class UserDTO
     {
@@ -9,5 +12,6 @@
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
         public UserProfileDTO Details { get; set; }
+        public List<TagDTO> Tags { get; set; }
     }
 }

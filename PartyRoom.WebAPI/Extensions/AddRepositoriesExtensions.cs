@@ -1,4 +1,5 @@
-﻿using PartyRoom.Core.Entities;
+﻿using Microsoft.AspNetCore.Mvc.TagHelpers.Cache;
+using PartyRoom.Core.Entities;
 using PartyRoom.Core.Interfaces.Repositories;
 using PartyRoom.Infrastructure.Repositories;
 
@@ -15,6 +16,7 @@ namespace PartyRoom.WebAPI.Extensions
             services.AddScoped<IProfileRepository, ProfileRepositoty>();
             services.AddScoped<IRoomRepository, RoomRepository>();
             services.AddScoped<IUserRoomRepository, UserRoomRepository>();
+            services.AddScoped<ITagRepository, TagRepository>();
         }
     }
 }
