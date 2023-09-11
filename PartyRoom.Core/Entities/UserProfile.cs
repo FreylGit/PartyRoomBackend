@@ -6,7 +6,9 @@ namespace PartyRoom.Core.Entities
     {
         [Key]
         public Guid ApplicationUserId { get; set; }
+
         public string? About { get; set; }
+
         public string? ImagePath { get; set; } 
     }
 }

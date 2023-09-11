@@ -50,6 +50,7 @@ namespace PartyRoom.WebAPI.Controllers
         }
 
         [HttpPost("AddTag")]
+        [Authorize(RoleConstants.RoleUser)]
         public async Task<IActionResult>AddTag(TagCreateDTO tag)
         {
             var userId = _jwtService.GetUserIdByToken(HttpContext);
@@ -58,6 +59,7 @@ namespace PartyRoom.WebAPI.Controllers
         }
 
         [HttpDelete("DeleteTag")]
+        [Authorize(RoleConstants.RoleUser)]
         public async Task<IActionResult> DeleteTag(Guid tagId)
         {
             var userId = _jwtService.GetUserIdByToken(HttpContext);

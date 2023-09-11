@@ -9,9 +9,13 @@ namespace PartyRoom.Core.Entities
 		
         [Key]
         public Guid Id { get; set; }
+
         public string Name { get; set; }
+
         public bool Important { get; set; }
+
         public ApplicationUser ApplicationUser { get; set; } = null;
+
         public Guid ApplicationUserId { get; set; }
     }
 }

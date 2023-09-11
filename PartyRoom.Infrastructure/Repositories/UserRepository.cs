@@ -10,8 +10,11 @@ namespace PartyRoom.Infrastructure.Repositories
     public class UserRepository : RepositoryBase<ApplicationUser>, IUserRepository
     {
         private readonly UserManager<ApplicationUser> _userManager;
+
         private readonly RoleManager<ApplicationRole> _roleManager;
+
         private readonly IProfileRepository _profileRepository;
+
         public UserRepository(ApplicationDbContext context,
             UserManager<ApplicationUser> userManager, IProfileRepository profileRepository, RoleManager<ApplicationRole> roleManager) : base(context)
         {

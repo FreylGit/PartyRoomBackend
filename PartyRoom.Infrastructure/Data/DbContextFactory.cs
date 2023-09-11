@@ -25,7 +25,7 @@ namespace PartyRoom.Infrastructure.Data
 
             var connectionString = configuration.GetConnectionString("DefaultConnection");
             var dbContextBuilder = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseSqlServer(connectionString);
+                .UseNpgsql(connectionString);
 
             return new ApplicationDbContext(dbContextBuilder.Options);
         }

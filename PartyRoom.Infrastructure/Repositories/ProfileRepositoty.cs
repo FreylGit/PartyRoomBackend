@@ -10,6 +10,7 @@ namespace PartyRoom.Infrastructure.Repositories
         public ProfileRepositoty(ApplicationDbContext context) : base(context)
         {
         }
+
         public override async Task<UserProfile> GetByIdAsync(Guid userId)
         {
             ApplicationUser userProfile = _context.Users.Where(p => p.Id == userId).Include(p => p.UserProfile).FirstOrDefault();

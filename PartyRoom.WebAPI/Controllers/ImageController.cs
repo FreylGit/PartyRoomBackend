@@ -12,6 +12,7 @@ namespace PartyRoom.WebAPI.Controllers
         {
             _imageService = imageService;
         }
+
         [HttpGet("{imagePath}")]
         public async Task<object> GetImage(string imagePath)
         {

@@ -1,6 +1,4 @@
-using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using PartyRoom.Infrastructure.Data;
 using PartyRoom.WebAPI.Extensions;
 using PartyRoom.WebAPI.Helpers;
 using PartyRoom.WebAPI.MappingProfiles;
@@ -10,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>();
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
 
-
+builder.Services.AddCors();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddCustomIdentity();
@@ -19,8 +17,6 @@ builder.Services.AddCustomAuthorization();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Your API", Version = "v1" });
-
-    // �������� �������� ��� ����������� JWT
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
@@ -51,8 +47,7 @@ builder.Services.AddRepositories();
 builder.Services.AddServices();
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
+
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
@@ -60,12 +55,16 @@ if (app.Environment.IsDevelopment())
         c.DocumentTitle = "PartyRoom API Documentation";
         c.DefaultModelsExpandDepth(-1);
     });
-}
+
 
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
-
+app.UseCors(x => x
+               .AllowAnyMethod()
+               .AllowAnyHeader()
+               .SetIsOriginAllowed(origin => true) 
+               .AllowCredentials()); 
 app.MapControllers();
 
 app.Run();

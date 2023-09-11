@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PartyRoom.Core.Constants;
 using PartyRoom.Core.DTOs.Room;
 using PartyRoom.Core.Interfaces.Services;
 using PartyRoom.WebAPI.Services;
@@ -20,7 +21,7 @@ namespace PartyRoom.WebAPI.Controllers
 
 
         [HttpPost]
-        [Authorize]
+        [Authorize(RoleConstants.RoleUser)]
         public async Task<IActionResult> Create(RoomCreateDTO roomCreate)
         {
             var userId = _jwtService.GetUserIdByToken(HttpContext);
@@ -29,20 +30,25 @@ namespace PartyRoom.WebAPI.Controllers
         }
 
         [HttpPost("ConnectToRoom")]
+        [Authorize(RoleConstants.RoleUser)]
         public async Task<IActionResult> ConnectToRoom(string link)
         {
             var userId = _jwtService.GetUserIdByToken(HttpContext);
             await _roomService.ConnectToRoomAsync(userId, link);
             return Ok();
         }
+
         [HttpGet("{roomId}")]
+        [Authorize(RoleConstants.RoleUser)]
         public async Task<IActionResult> Get(Guid roomId)
         {
             var userId = _jwtService.GetUserIdByToken(HttpContext);
             var room = await _roomService.GetRoomAsync(userId, roomId);
             return Ok(room);
         }
+
         [HttpGet]
+        [Authorize(RoleConstants.RoleUser)]
         public async Task<IActionResult> Get()
         {
             var userId = _jwtService.GetUserIdByToken(HttpContext);

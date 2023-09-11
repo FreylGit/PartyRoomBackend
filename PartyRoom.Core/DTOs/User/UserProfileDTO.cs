@@ -3,6 +3,7 @@
     public class UserProfileDTO
     {
         public string About { get; set; }
+
         public string ImagePath { get; set; }
     }
 }

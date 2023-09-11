@@ -13,7 +13,7 @@ namespace PartyRoom.Infrastructure
         {
             var connectionString = config.GetConnectionString("DefaultConnection");
             services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlServer(connectionString, x =>
+            options.UseNpgsql(connectionString, x =>
                 x.MigrationsAssembly(typeof(DependencyInjection).Assembly.GetName().Name)));
             return services;
         }

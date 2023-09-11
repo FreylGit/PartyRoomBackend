@@ -29,10 +29,12 @@ namespace PartyRoom.WebAPI.Controllers
             var accessToken = _jwtService.CreateAccessToken(user,claims);
             var refreshToken = _jwtService.GenerateRefreshToken();
             refreshToken.ApplicationUserId = user.Id;
+            refreshToken.ApplicationUser = user;
             await _accountService.CreateRefreshTokenAsync(refreshToken);
             SetRefreshToken(refreshToken);
             return Ok(accessToken);
         }
+
         [HttpPost("Registration")]
         public async Task<IActionResult> Registration(UserRegistrationDTO userRegistration)
         {
@@ -47,6 +49,7 @@ namespace PartyRoom.WebAPI.Controllers
             }
 
         }
+
         [HttpPost("RefreshToken")]
         public async Task<IActionResult> RefreshToken()
         {
