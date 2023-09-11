@@ -55,7 +55,7 @@ var app = builder.Build();
         c.DocumentTitle = "PartyRoom API Documentation";
         c.DefaultModelsExpandDepth(-1);
     });
-
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseHttpsRedirection();
 

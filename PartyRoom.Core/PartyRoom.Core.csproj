@@ -18,8 +18,10 @@
 
   <ItemGroup>
     <None Remove="DTOs\Tag\" />
+    <None Remove="DTOs\Error\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DTOs\Tag\" />
+    <Folder Include="DTOs\Error\" />
   </ItemGroup>
 </Project>

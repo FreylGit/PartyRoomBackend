@@ -12,6 +12,7 @@ namespace PartyRoom.Core.Services
         private readonly IUserRepository _userRepository;
        
         private readonly SignInManager<ApplicationUser> _signInManager;
+
         public AccountService(IRepository<RefreshToken> refreshTokenRepository,
             IUserRepository userRepository, SignInManager<ApplicationUser> signInManager)
         {
@@ -31,6 +32,7 @@ namespace PartyRoom.Core.Services
             {
                 await _refreshTokenRepository.AddAsync(refreshToken);
             }
+
             await _refreshTokenRepository.SaveChangesAsync();
         }
 
@@ -44,11 +46,12 @@ namespace PartyRoom.Core.Services
         {
             var user = await _userRepository.GetByEmailAsync(userLogin.Email);
             var result = await _signInManager.PasswordSignInAsync(user, userLogin.Password,false,false);
-            if(result.Succeeded)
+
+            if(!result.Succeeded)
             {
-                return user;
+                throw new InvalidOperationException("Не удалось войти в систему");
             }
-            return null;
+            return user;
 
         }
 

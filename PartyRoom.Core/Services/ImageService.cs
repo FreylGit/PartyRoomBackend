@@ -18,7 +18,7 @@ namespace PartyRoom.Core.Services
         {
             if (imageName == null)
             {
-                throw new ArgumentException("Failed to recognize image name");
+                throw new ArgumentNullException("Failed to recognize image name");
             }
             try
             {
