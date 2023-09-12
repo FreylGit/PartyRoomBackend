@@ -16,5 +16,11 @@ namespace PartyRoom.Infrastructure.Repositories
             ApplicationUser userProfile = _context.Users.Where(p => p.Id == userId).Include(p => p.UserProfile).FirstOrDefault();
             return userProfile.UserProfile;
         }
+
+        public async Task<ApplicationUser> GetUserByIdAsync(Guid userId)
+        {
+            var userProfile = await _context.Users.Where(p => p.Id == userId).Include(p => p.UserProfile).Include(x=>x.Tags).FirstOrDefaultAsync();
+            return userProfile;
+        }
     }
 }

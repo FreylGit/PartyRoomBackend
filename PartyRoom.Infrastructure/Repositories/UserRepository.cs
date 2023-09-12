@@ -50,11 +50,5 @@ namespace PartyRoom.Infrastructure.Repositories
             var claims = await _userManager.GetClaimsAsync(user);
             return claims.ToList();
         }
-
-        public async Task<ApplicationUser> GetProfileUserByIdAsync(Guid userId)
-        {
-            var userProfile = await _context.Users.Where(p => p.Id == userId).Include(p => p.UserProfile).FirstOrDefaultAsync();
-            return userProfile;
-        }
     }
 }

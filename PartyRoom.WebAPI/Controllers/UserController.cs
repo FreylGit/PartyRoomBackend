@@ -17,21 +17,12 @@ namespace PartyRoom.WebAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(UserRegistrationDTO userRegistration)
         {
-            try
-            {
-                await _userService.CreateUserAsync(userRegistration);
-                
-                return Ok();
-            }
-            catch
-            {
-                return BadRequest();
-            }
-            
+            await _userService.CreateUserAsync(userRegistration);
+            return Ok();
         }
 
         [HttpDelete]
-        public async Task <IActionResult >Delete(Guid userId) 
+        public async Task<IActionResult> Delete(Guid userId)
         {
             var user = await _userService.GetUserByIdAsync(userId);
             await _userService.DeleteUserAsync(user);

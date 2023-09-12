@@ -10,7 +10,7 @@ namespace PartyRoom.Core.Services
     {
         private readonly IRepository<RefreshToken> _refreshTokenRepository;
         private readonly IUserRepository _userRepository;
-       
+
         private readonly SignInManager<ApplicationUser> _signInManager;
 
         public AccountService(IRepository<RefreshToken> refreshTokenRepository,
@@ -24,7 +24,7 @@ namespace PartyRoom.Core.Services
         public async Task CreateRefreshTokenAsync(RefreshToken refreshToken)
         {
             var refreshFind = await _refreshTokenRepository.GetByIdAsync(refreshToken.ApplicationUserId);
-            if(refreshFind != null)
+            if (refreshFind != null)
             {
                 _refreshTokenRepository.Update(refreshFind);
             }
@@ -45,9 +45,9 @@ namespace PartyRoom.Core.Services
         public async Task<ApplicationUser> LoginAsync(UserLoginDTO userLogin)
         {
             var user = await _userRepository.GetByEmailAsync(userLogin.Email);
-            var result = await _signInManager.PasswordSignInAsync(user, userLogin.Password,false,false);
+            var result = await _signInManager.PasswordSignInAsync(user, userLogin.Password, false, false);
 
-            if(!result.Succeeded)
+            if (!result.Succeeded)
             {
                 throw new InvalidOperationException("Не удалось войти в систему");
             }
@@ -58,13 +58,13 @@ namespace PartyRoom.Core.Services
         public async Task LogoutAsync(Guid userId)
         {
             var token = await _refreshTokenRepository.GetByIdAsync(userId);
-             _refreshTokenRepository.Delete(token);
+            _refreshTokenRepository.Delete(token);
         }
 
         public async Task UpdateRefreshTokenAsync(RefreshToken newRefreshToken)
         {
             _refreshTokenRepository.Update(newRefreshToken);
-           await _refreshTokenRepository.SaveChangesAsync();
+            await _refreshTokenRepository.SaveChangesAsync();
         }
     }
 }

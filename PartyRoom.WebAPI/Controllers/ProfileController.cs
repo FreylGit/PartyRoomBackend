@@ -1,11 +1,10 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PartyRoom.Core.Constants;
 using PartyRoom.Core.DTOs.Tag;
+using PartyRoom.Core.DTOs.User;
 using PartyRoom.Core.Entities;
 using PartyRoom.Core.Interfaces.Services;
-using PartyRoom.Infrastructure.Data;
 using PartyRoom.WebAPI.Services;
 
 namespace PartyRoom.WebAPI.Controllers
@@ -16,11 +15,13 @@ namespace PartyRoom.WebAPI.Controllers
     {
         private readonly JwtService _jwtService;
         private readonly IProfileService _profileService;
+        private readonly IUserService _userSerivce;
 
-        public ProfileController(JwtService jwtService, IProfileService profileService)
+        public ProfileController(JwtService jwtService, IProfileService profileService, IUserService userService)
         {
             _jwtService = jwtService;
             _profileService = profileService;
+            _userSerivce = userService;
         }
 
         [HttpGet]
@@ -45,16 +46,16 @@ namespace PartyRoom.WebAPI.Controllers
         public async Task<IActionResult> UpdateImage(IFormFile image)
         {
             var userId = _jwtService.GetUserIdByToken(HttpContext);
-             await _profileService.UpdateImageAsync(userId, image);
+            await _profileService.UpdateImageAsync(userId, image);
             return Ok();
         }
 
         [HttpPost("AddTag")]
         [Authorize(RoleConstants.RoleUser)]
-        public async Task<IActionResult>AddTag(TagCreateDTO tag)
+        public async Task<IActionResult> AddTag(TagCreateDTO tag)
         {
             var userId = _jwtService.GetUserIdByToken(HttpContext);
-            await  _profileService.AddTagAsync(userId,tag);
+            await _profileService.AddTagAsync(userId, tag);
             return Ok();
         }
 
@@ -65,6 +66,16 @@ namespace PartyRoom.WebAPI.Controllers
             var userId = _jwtService.GetUserIdByToken(HttpContext);
             await _profileService.DeleteTagAsync(userId, tagId);
             return Ok();
+        }
+
+        [HttpPut("Update")]
+        [Authorize(RoleConstants.RoleUser)]
+        public async Task<IActionResult> UpdateAbout(UserProfileUpdateDTO updateProfile)
+        {
+            var userId = _jwtService.GetUserIdByToken(HttpContext);
+            await _profileService.UpdateProfileAsync(updateProfile, userId);
+            return Ok();
+
         }
 
     }

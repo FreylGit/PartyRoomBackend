@@ -17,6 +17,7 @@ namespace PartyRoom.Infrastructure.Repositories
             var tags = _context.Tags.AsNoTracking().Where(t => t.ApplicationUserId == userId).OrderBy(t => t.Important).ToList();
             return tags;
         }
+
     }
 }
 

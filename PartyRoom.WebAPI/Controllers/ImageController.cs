@@ -16,16 +16,8 @@ namespace PartyRoom.WebAPI.Controllers
         [HttpGet("{imagePath}")]
         public async Task<object> GetImage(string imagePath)
         {
-            try
-            {
-                var fileByte = await _imageService.GetImageAsync(imagePath);
-                return File(fileByte, "image/jpeg");
-            }
-            catch (ArgumentNullException)
-            {
-                return NotFound();
-            }
-
+            var fileByte = await _imageService.GetImageAsync(imagePath);
+            return File(fileByte, "image/jpeg");
         }
     }
 }

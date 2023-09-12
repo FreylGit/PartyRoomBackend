@@ -1,4 +1,6 @@
-﻿namespace PartyRoom.Core.DTOs.User
+﻿using PartyRoom.Core.DTOs.Tag;
+
+namespace PartyRoom.Core.DTOs.User
 {
     public class UserPublicDTO
     {
@@ -9,5 +11,7 @@
         public string UserName { get; set; }
 
         public UserProfileDTO Details { get; set; }
+
+        public List<TagDTO> Tags { get; set; }
     }
 }

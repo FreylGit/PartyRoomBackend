@@ -14,7 +14,7 @@ namespace PartyRoom.WebAPI.Controllers
         private IAccountService _accountService;
         private IUserService _userService;
         private JwtService _jwtService;
-        public AccountController(IAccountService accountService,IUserService userService,JwtService jwtService)
+        public AccountController(IAccountService accountService, IUserService userService, JwtService jwtService)
         {
             _accountService = accountService;
             _userService = userService;
@@ -26,7 +26,7 @@ namespace PartyRoom.WebAPI.Controllers
         {
             var user = await _accountService.LoginAsync(userLogin);
             var claims = await _userService.GetClaimsAsync(user);
-            var accessToken = _jwtService.CreateAccessToken(user,claims);
+            var accessToken = _jwtService.CreateAccessToken(user, claims);
             var refreshToken = _jwtService.GenerateRefreshToken();
             refreshToken.ApplicationUserId = user.Id;
             refreshToken.ApplicationUser = user;
@@ -38,16 +38,8 @@ namespace PartyRoom.WebAPI.Controllers
         [HttpPost("Registration")]
         public async Task<IActionResult> Registration(UserRegistrationDTO userRegistration)
         {
-            try
-            {
-                await _userService.CreateUserAsync(userRegistration);
-                return await Login(new UserLoginDTO { Email = userRegistration.Email,Password = userRegistration.Password});
-            }
-            catch
-            {
-                return BadRequest();
-            }
-
+            await _userService.CreateUserAsync(userRegistration);
+            return await Login(new UserLoginDTO { Email = userRegistration.Email, Password = userRegistration.Password });
         }
 
         [HttpPost("RefreshToken")]

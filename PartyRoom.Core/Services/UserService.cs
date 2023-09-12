@@ -75,6 +75,6 @@ namespace PartyRoom.Core.Services
             return claims;
         }
 
-     
+
     }
 }

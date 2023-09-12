@@ -13,7 +13,7 @@ namespace PartyRoom.WebAPI.Extensions
             services.AddScoped<IRoomService, RoomService>();
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IProfileService, ProfileService>();
-            services.AddScoped<IImageService,ImageService>();
+            services.AddScoped<IImageService, ImageService>();
         }
     }
 }

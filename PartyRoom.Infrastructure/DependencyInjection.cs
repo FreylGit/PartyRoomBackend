@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PartyRoom.Infrastructure.Data;
@@ -17,7 +16,6 @@ namespace PartyRoom.Infrastructure
                 x.MigrationsAssembly(typeof(DependencyInjection).Assembly.GetName().Name)));
             return services;
         }
-
     }
 }
 

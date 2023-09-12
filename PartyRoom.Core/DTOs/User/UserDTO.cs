@@ -1,5 +1,4 @@
 ﻿using PartyRoom.Core.DTOs.Tag;
-using PartyRoom.Core.Entities;
 
 namespace PartyRoom.Core.DTOs.User
 {

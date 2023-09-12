@@ -12,7 +12,7 @@ namespace PartyRoom.WebAPI.Extensions
             services.AddScoped<IRoleRepository, RoleRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IProfileRepository, ProfileRepositoty>();
-            services.AddScoped<IRepository<RefreshToken>,RefreshTokenRepository>();
+            services.AddScoped<IRepository<RefreshToken>, RefreshTokenRepository>();
             services.AddScoped<IProfileRepository, ProfileRepositoty>();
             services.AddScoped<IRoomRepository, RoomRepository>();
             services.AddScoped<IUserRoomRepository, UserRoomRepository>();

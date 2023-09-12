@@ -1,4 +1,4 @@
-﻿using System;
+﻿
 namespace PartyRoom.Core.DTOs.Tag
 {
 	public struct TagDTO

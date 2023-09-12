@@ -12,5 +12,6 @@ namespace PartyRoom.Core.Interfaces.Services
         Task<UserDTO> GetProfileAsync(Guid id);
         Task<UserPublicDTO> GetProfilePublicAsync(Guid id);
         Task UpdateImageAsync(Guid userId, IFormFile image);
+        Task UpdateProfileAsync(UserProfileUpdateDTO userProfile, Guid userId);
     }
 }

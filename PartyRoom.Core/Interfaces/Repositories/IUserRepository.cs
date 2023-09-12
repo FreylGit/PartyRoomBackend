@@ -10,6 +10,5 @@ namespace PartyRoom.Core.Interfaces.Repositories
         Task AddClaimAsync(ApplicationUser user,Claim  claim);
         Task AddRoleAsync(ApplicationUser user,ApplicationRole role);
         Task<List<Claim>> GetClaimsAsync(ApplicationUser user);
-        Task<ApplicationUser> GetProfileUserByIdAsync(Guid userId);
     }
 }

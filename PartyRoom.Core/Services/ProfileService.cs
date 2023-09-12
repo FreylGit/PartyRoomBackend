@@ -17,7 +17,7 @@ namespace PartyRoom.Core.Services
         private readonly IImageService _imageService;
         private readonly ITagRepository _tagRepository;
         public ProfileService(IMapper mapper, IProfileRepository profileRepository, IUserRepository userRepository,
-            IImageService imageService,ITagRepository tagRepository)
+            IImageService imageService, ITagRepository tagRepository)
         {
             _mapper = mapper;
             _profileRepository = profileRepository;
@@ -28,10 +28,21 @@ namespace PartyRoom.Core.Services
 
         public async Task AddTagAsync(Guid userId, TagCreateDTO tag)
         {
+            if (tag == null)
+            {
+                throw new ArgumentNullException("Tag не может быть null");
+            }
+
             var tagMap = _mapper.Map<Tag>(tag);
+            if (tagMap == null)
+            {
+                throw new InvalidOperationException("Не удалось смаппить Tag");
+            }
+
             tagMap.ApplicationUserId = userId;
             await _tagRepository.AddAsync(tagMap);
             await _tagRepository.SaveChangesAsync();
+
         }
 
         public async Task DeleteTagAsync(Guid userId, Guid tagId)
@@ -43,7 +54,7 @@ namespace PartyRoom.Core.Services
 
         public async Task<UserDTO> GetProfileAsync(Guid id)
         {
-            var userFind = await _userRepository.GetProfileUserByIdAsync(id);
+            var userFind = await _profileRepository.GetUserByIdAsync(id);
             var tags = _tagRepository.Get(id).ToList();
             var tagsMap = _mapper.Map<List<TagDTO>>(tags);
 
@@ -54,7 +65,7 @@ namespace PartyRoom.Core.Services
 
         public async Task<UserPublicDTO> GetProfilePublicAsync(Guid id)
         {
-            var userFind = await _userRepository.GetProfileUserByIdAsync(id);
+            var userFind = await _profileRepository.GetUserByIdAsync(id);
             var userMap = _mapper.Map<UserPublicDTO>(userFind);
             return userMap;
         }
@@ -65,6 +76,29 @@ namespace PartyRoom.Core.Services
             var path = await _imageService.SaveImageAsync(image);
             userProfile.ImagePath = path;
             _profileRepository.Update(userProfile);
+            await _profileRepository.SaveChangesAsync();
+        }
+
+        public async Task UpdateProfileAsync(UserProfileUpdateDTO userProfile, Guid userId)
+        {
+            //TODO: Создать маппинг
+            var profile = new UserProfile
+            {
+                About = userProfile.About,
+                ApplicationUserId = userId
+            };
+
+            if (userProfile == null)
+            {
+                throw new ArgumentNullException("Пустой профиль");
+            }
+
+            if (profile.ApplicationUserId == Guid.Empty)
+            {
+                throw new ArgumentNullException("Пустой пользователь");
+            }
+
+            _profileRepository.Update(profile);
             await _profileRepository.SaveChangesAsync();
         }
     }
