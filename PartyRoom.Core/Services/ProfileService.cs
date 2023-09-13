@@ -81,16 +81,16 @@ namespace PartyRoom.Core.Services
 
         public async Task UpdateProfileAsync(UserProfileUpdateDTO userProfile, Guid userId)
         {
-            //TODO: Создать маппинг
-            var profile = new UserProfile
-            {
-                About = userProfile.About,
-                ApplicationUserId = userId
-            };
-
             if (userProfile == null)
             {
-                throw new ArgumentNullException("Пустой профиль");
+                throw new ArgumentNullException("Полфиль пустой");
+            }
+
+            var profile = _mapper.Map<UserProfile>(userProfile);
+            profile.ApplicationUserId = userId;
+            if (profile == null)
+            {
+                throw new InvalidCastException("Ошибка маппинга");
             }
 
             if (profile.ApplicationUserId == Guid.Empty)

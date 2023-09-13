@@ -55,5 +55,15 @@ namespace PartyRoom.WebAPI.Controllers
             var rooms = await _roomService.GetRoomsAsync(userId);
             return Ok(rooms);
         }
+
+        [HttpGet("ConnectToRoom")]
+        [Authorize(RoleConstants.RoleUser)]
+        public async Task<IActionResult> ConnectToRoom(Guid roomId)
+        {
+            var userId = _jwtService.GetUserIdByToken(HttpContext);
+            var link = await _roomService.GetConnectLinkToRoomAsync(userId, roomId);
+
+            return Ok(link);
+        }
     }
 }

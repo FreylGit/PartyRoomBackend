@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using PartyRoom.Core.DTOs.Room;
 using PartyRoom.Core.Entities;
 using PartyRoom.Core.Interfaces.Repositories;
@@ -40,6 +41,17 @@ namespace PartyRoom.Core.Services
 
         }
 
+        public async Task<string> GetConnectLinkToRoomAsync(Guid userId, Guid roomId)
+        {
+            //TODO: Добавить в репозиторий проверку на то что пользователь автор
+            var room = await _roomRepository.Models.FirstOrDefaultAsync(x => x.AuthorId == userId && x.Id == roomId);
+            if (room == null)
+            {
+                throw new InvalidOperationException("Пользователь не создатель комнаты");
+            }
+            return room.Link;
+        }
+
         public async Task<RoomInfoDTO> GetRoomAsync(Guid userId, Guid roomId)
         {
 
@@ -57,22 +69,16 @@ namespace PartyRoom.Core.Services
             return roomMap;
         }
 
-        public async Task<IEnumerable<RoomInfoDTO>> GetRoomsAsync(Guid userId)
+        public async Task<IEnumerable<RoomItemDTO>> GetRoomsAsync(Guid userId)
         {
-            var userRooms = _userRoomRepository.Models.Where(ur => ur.UserId == userId).ToList();
-            var rooms = new List<Room>();
-            foreach (var userRoom in userRooms)
-            {
-                var room = await _roomRepository.GetByIdAsync(userRoom.RoomId);
-                rooms.Add(room);
-            }
-            var roomsMap = _mapper.Map<IEnumerable<RoomInfoDTO>>(rooms);
+            var rooms = _userRoomRepository.Models.Where(x => x.UserId == userId).Select(x => x.Room).OrderBy(x => x.StartDate).OrderBy(x => x.IsStarted);
+            var roomsMap = _mapper.Map<List<RoomItemDTO>>(rooms);
             return roomsMap;
         }
 
         private async Task<string> GenerateUniqueSlug()
         {
-            var length = 12;
+            var length = 16;
             using var rng = new System.Security.Cryptography.RNGCryptoServiceProvider();
             var bytes = new byte[length];
             rng.GetBytes(bytes);
@@ -92,7 +98,7 @@ namespace PartyRoom.Core.Services
                     .Replace("=", "")
                     .Substring(0, length);
             }
-
+            
             return slug;
         }
     }

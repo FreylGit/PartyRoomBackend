@@ -17,18 +17,19 @@ namespace PartyRoom.WebAPI.MappingProfiles
             CreateMap<ApplicationUser, UserDTO>();
 
             CreateMap<UserProfile, UserProfileDTO>()
-                .ForMember(dest => dest.ImagePath,opt=>opt.MapFrom(src=> ApplicationConstants.URL_IMAGE+ src.ImagePath));
+                .ForMember(dest => dest.ImagePath, opt => opt.MapFrom(src => ApplicationConstants.URL_IMAGE + src.ImagePath));
             CreateMap<ApplicationUser, UserDTO>()
-                .ForMember(dest=>dest.FirtsName,opt=>opt.MapFrom(src=>src.FirstName))
+                .ForMember(dest => dest.FirtsName, opt => opt.MapFrom(src => src.FirstName))
                 .ForMember(dest => dest.Details, opt => opt.MapFrom(src => src.UserProfile));
 
-            CreateMap<ApplicationUser,UserPublicDTO>()
+            CreateMap<ApplicationUser, UserPublicDTO>()
                 .ForMember(dest => dest.FirtsName, opt => opt.MapFrom(src => src.FirstName))
                 .ForMember(dest => dest.Details, opt => opt.MapFrom(src => src.UserProfile))
                 .ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.Tags));
 
             CreateMap<TagCreateDTO, Tag>();
             CreateMap<Tag, TagDTO>();
+            CreateMap<UserProfileUpdateDTO, UserProfile>();
 
         }
     }
