@@ -9,5 +9,6 @@ namespace PartyRoom.Core.Interfaces.Services
         Task<string> GetConnectLinkToRoomAsync(Guid userId, Guid roomId);
         Task<RoomInfoDTO> GetRoomAsync(Guid userId, Guid roomId);
         Task<IEnumerable<RoomItemDTO>> GetRoomsAsync(Guid userId);
+        Task CheckStartRoomsAsync(CancellationToken stoppingToken);
     }
 }

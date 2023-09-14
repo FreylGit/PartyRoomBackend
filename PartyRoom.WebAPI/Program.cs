@@ -3,6 +3,7 @@ using PartyRoom.WebAPI.Extensions;
 using PartyRoom.WebAPI.Helpers;
 using PartyRoom.WebAPI.MappingProfiles;
 using PartyRoom.Infrastructure;
+using PartyRoom.WebAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>();
@@ -41,10 +42,11 @@ builder.Services.AddSwaggerGen(c =>
         });
 });
 builder.Services.AddInfrastructure(builder.Configuration);
-
+builder.Services.AddHostedService<RoomLogicBackgroundService>();
 builder.Services.AddAutoMapper(typeof(UserMappingProfile),typeof(RoomMappingProfile));
 builder.Services.AddRepositories();
 builder.Services.AddServices();
+
 var app = builder.Build();
 
 

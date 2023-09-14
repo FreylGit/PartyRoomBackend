@@ -14,6 +14,7 @@ namespace PartyRoom.WebAPI.Controllers
         private IAccountService _accountService;
         private IUserService _userService;
         private JwtService _jwtService;
+
         public AccountController(IAccountService accountService, IUserService userService, JwtService jwtService)
         {
             _accountService = accountService;

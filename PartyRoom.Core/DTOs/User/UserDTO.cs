@@ -6,18 +6,18 @@ namespace PartyRoom.Core.DTOs.User
     {
         public Guid Id { get; set; }
 
-        public string FirtsName { get; set; }
+        public string FirtsName { get; set; } = null!;
 
-        public string LastName { get; set; }
+        public string LastName { get; set; } = null!;
 
-        public string UserName { get; set; }
+        public string UserName { get; set; } = null!;
 
-        public string Email { get; set; }
+        public string Email { get; set; } = null!;
 
-        public string PhoneNumber { get; set; }
+        public string PhoneNumber { get; set; } = null!;
 
-        public UserProfileDTO Details { get; set; }
+        public UserProfileDTO Details { get; set; } = null!;
 
-        public List<TagDTO> Tags { get; set; }
+        public List<TagDTO> Tags { get; set; } = null!;
     }
 }

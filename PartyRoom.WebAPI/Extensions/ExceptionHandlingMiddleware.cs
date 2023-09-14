@@ -39,6 +39,10 @@ namespace PartyRoom.WebAPI.Extensions
             {
                 await HandleExceptionAsync(httpContext, ex.Message, HttpStatusCode.BadRequest);
             }
+            catch(InvalidDataException ex)
+            {
+                await HandleExceptionAsync(httpContext, ex.Message, HttpStatusCode.BadRequest);
+            }
             catch (Exception ex)
             {
                 await HandleExceptionAsync(httpContext, ex.Message, HttpStatusCode.BadRequest);
