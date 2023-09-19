@@ -26,6 +26,9 @@ namespace PartyRoom.Core.Services
             var refreshFind = await _refreshTokenRepository.GetByIdAsync(refreshToken.ApplicationUserId);
             if (refreshFind != null)
             {
+                refreshFind.Token = refreshToken.Token;
+                refreshFind.Expires = refreshToken.Expires;
+                refreshFind.Created = refreshToken.Created;
                 _refreshTokenRepository.Update(refreshFind);
             }
             else

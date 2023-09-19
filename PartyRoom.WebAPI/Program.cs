@@ -59,7 +59,7 @@ var app = builder.Build();
     });
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
-app.UseHttpsRedirection();
+
 
 app.UseAuthorization();
 app.UseCors(x => x

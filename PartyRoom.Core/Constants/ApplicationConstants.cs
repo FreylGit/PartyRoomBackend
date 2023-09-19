@@ -2,7 +2,7 @@
 {
     public class ApplicationConstants
     {
-        public const string BASE_URL = "https://localhost:7000/api";
+        public const string BASE_URL = "http://localhost:5069/api";
 
         public const string FILE_DIRECTORY = "StaticFile";
 

@@ -29,7 +29,7 @@ namespace PartyRoom.WebAPI.Services
                issuer: _jwtSettings.Issuer,
                audience: _jwtSettings.Audience,
                claims: claims,
-               expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(60)),
+               expires: DateTime.UtcNow.Add(TimeSpan.FromDays(2)),
                notBefore: DateTime.UtcNow,
                signingCredentials: new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256));
             return new JwtSecurityTokenHandler().WriteToken(jwt);

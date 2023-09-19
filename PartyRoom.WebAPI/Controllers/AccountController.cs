@@ -33,7 +33,7 @@ namespace PartyRoom.WebAPI.Controllers
             refreshToken.ApplicationUser = user;
             await _accountService.CreateRefreshTokenAsync(refreshToken);
             SetRefreshToken(refreshToken);
-            return Ok(accessToken);
+            return Ok(new { token = accessToken });
         }
 
         [HttpPost("Registration")]
@@ -58,7 +58,7 @@ namespace PartyRoom.WebAPI.Controllers
             {
                 var newRefreshToken = _jwtService.GenerateRefreshToken();
                 newRefreshToken.ApplicationUserId = currentRefreshToken.ApplicationUserId;
-                _accountService.UpdateRefreshTokenAsync(newRefreshToken);
+                await _accountService.UpdateRefreshTokenAsync(newRefreshToken);
                 SetRefreshToken(newRefreshToken);
             }
 
@@ -75,6 +75,12 @@ namespace PartyRoom.WebAPI.Controllers
                 Expires = newRefreshToken.Expires,
             };
             Response.Cookies.Append("refreshToken", newRefreshToken.Token, cookieOprions);
+        }
+
+        [HttpGet]
+        public IActionResult Test()
+        {
+            return Ok(new { name = "andrey", age = 22 });
         }
     }
 }
