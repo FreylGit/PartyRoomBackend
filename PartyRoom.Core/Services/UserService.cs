@@ -14,12 +14,15 @@ namespace PartyRoom.Core.Services
         private readonly IUserRepository _userRepository;
         private readonly IRoleRepository _roleRepository;
         private readonly IProfileRepository _profileRepository;
-        public UserService(IMapper mapper, IUserRepository userRepository, IRoleRepository roleRepository, IProfileRepository profileRepository)
+        private readonly IProfileService _profileService;
+        public UserService(IMapper mapper, IUserRepository userRepository, IRoleRepository roleRepository,
+            IProfileRepository profileRepository, IProfileService profileService)
         {
             _mapper = mapper;
             _userRepository = userRepository;
             _roleRepository = roleRepository;
             _profileRepository = profileRepository;
+            _profileService = profileService ;
         }
         public async Task CreateUserAsync(UserRegistrationDTO user)
         {
@@ -36,10 +39,9 @@ namespace PartyRoom.Core.Services
             await _userRepository.AddClaimAsync(userMap, claim);
             await _profileRepository.AddAsync(new UserProfile
             {
-                //ApplicationUser = userMap,
                 ApplicationUserId = userMap.Id,
                 About = userMap.PhoneNumber,
-                ImagePath = ""
+                ImagePath = "default.png"
             });
             await _profileRepository.SaveChangesAsync();
 
@@ -75,6 +77,30 @@ namespace PartyRoom.Core.Services
             return claims;
         }
 
+        public async Task CreateUserAsync(RegistrationWithUserProfileDTO model)
+        {
+            if (model.UserRegistration == null)
+            {
+                throw new ArgumentNullException("user");
+            }
+            var userMap = _mapper.Map<ApplicationUser>(model.UserRegistration);
 
+            await _userRepository.AddAsync(userMap, model.UserRegistration.Password);
+
+            var role = await _roleRepository.Models.FirstOrDefaultAsync(r => r.Name.ToLower() == "user");
+            await _userRepository.AddRoleAsync(userMap, role);
+            var claim = new Claim("Role", role.Name);
+            await _userRepository.AddClaimAsync(userMap, claim);
+            await _profileRepository.AddAsync(new UserProfile
+            {
+                ApplicationUserId = userMap.Id,
+                About = userMap.PhoneNumber,
+                ImagePath = "default.png"
+            });
+            await _profileRepository.SaveChangesAsync();
+            
+            await _profileService.AddTagAsync(userMap.Id, model.Tags);
+            
+        }
     }
 }

@@ -7,6 +7,7 @@ namespace PartyRoom.Core.Interfaces.Services
     public interface IUserService
     {
         Task CreateUserAsync(UserRegistrationDTO user);
+        Task CreateUserAsync(RegistrationWithUserProfileDTO user);
         Task DeleteUserAsync(ApplicationUser user);
         Task UpdateUserAsync(UserDTO user);
         Task<ApplicationUser> GetUserByIdAsync(Guid userId);

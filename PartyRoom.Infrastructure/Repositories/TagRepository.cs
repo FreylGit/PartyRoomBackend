@@ -6,10 +6,16 @@ using PartyRoom.Infrastructure.Data;
 
 namespace PartyRoom.Infrastructure.Repositories
 {
-    public class TagRepository : RepositoryBase<Tag>,ITagRepository
+    public class TagRepository : RepositoryBase<Tag>, ITagRepository
     {
         public TagRepository(ApplicationDbContext context) : base(context)
         {
+        }
+
+        public async Task AddAsync(List<Tag> tags)
+        {
+            await  _context.Tags.AddRangeAsync(tags);
+            await _context.SaveChangesAsync();
         }
 
         public ICollection<Tag> Get(Guid userId)

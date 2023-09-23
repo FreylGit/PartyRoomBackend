@@ -17,6 +17,8 @@ namespace PartyRoom.Core.Entities
         public ApplicationUser ApplicationUser { get; set; } = null!;
 
         public Guid ApplicationUserId { get; set; }
+
+        public bool IsLike { get; set; } = false;
     }
 }
 

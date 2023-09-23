@@ -13,5 +13,7 @@
         public DateTime StartDate { get; set; }
 
         public DateTime FinishDate { get; set; }
+
+        public int QuantityParticipant { get; set; }
     }
 }

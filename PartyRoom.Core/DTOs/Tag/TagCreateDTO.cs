@@ -6,6 +6,8 @@ namespace PartyRoom.Core.DTOs.Tag
         public string Name { get; set; } = null!;
 
         public bool Important { get; set; }
+
+        public bool IsLike { get; set; }
     }
 }
 

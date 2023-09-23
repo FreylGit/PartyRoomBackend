@@ -98,6 +98,8 @@ namespace PartyRoom.Core.Services
 
             var userRoom = await _userRoomRepository.GetByIdAsync(userId, roomId);
             roomMap.DestinationUserId = userRoom.DestinationUserId;
+            var quantity = _userRoomRepository.Models.Where(x => x.RoomId == roomId).Count();
+            roomMap.QuantityParticipant = quantity;
 
             return roomMap;
         }

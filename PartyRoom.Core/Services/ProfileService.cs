@@ -45,6 +45,27 @@ namespace PartyRoom.Core.Services
 
         }
 
+        public async Task AddTagAsync(Guid userId, List<TagCreateDTO> tag)
+        {
+            if (tag == null)
+            {
+                throw new ArgumentNullException("Tags не может быть null");
+            }
+
+            var tagMap = _mapper.Map<List<Tag>>(tag);
+            if (tagMap == null)
+            {
+                throw new InvalidOperationException("Не удалось смаппить Tag");
+            }
+
+            for(int i = 0; i < tagMap.Count(); i++)
+            {
+                tagMap[i].ApplicationUserId = userId;
+            }
+            await _tagRepository.AddAsync(tagMap);
+            await _tagRepository.SaveChangesAsync();
+        }
+
         public async Task DeleteTagAsync(Guid userId, Guid tagId)
         {
             var tag = await _tagRepository.Models.FirstOrDefaultAsync(t => t.Id == tagId && t.ApplicationUserId == userId);
