@@ -43,11 +43,11 @@ namespace PartyRoom.WebAPI.Controllers
             return await Login(new UserLoginDTO { Email = userRegistration.Email, Password = userRegistration.Password });
         }
 
-        [HttpPost("RegistrationWithUserProfileDTO")]
-        public async Task<IActionResult>RegistrationWithUserProfileDTO(RegistrationWithUserProfileDTO model)
+        [HttpPost("RegistrationWithUserProfile")]
+        public async Task<IActionResult>RegistrationWithUserProfile(RegistrationWithUserProfileDTO model)
         {
             await _userService.CreateUserAsync(model);
-            return Ok();
+            return await Login(new UserLoginDTO { Email = model.UserRegistration.Email, Password = model.UserRegistration.Password });
         }
 
 
