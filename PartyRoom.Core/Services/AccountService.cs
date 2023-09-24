@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using PartyRoom.Core.DTOs.User;
 using PartyRoom.Core.Entities;
 using PartyRoom.Core.Interfaces.Repositories;
@@ -39,9 +40,9 @@ namespace PartyRoom.Core.Services
             await _refreshTokenRepository.SaveChangesAsync();
         }
 
-        public async Task<RefreshToken> GetRefreshTokenAsync(Guid userId)
+        public async Task<RefreshToken> GetRefreshTokenAsync(string refresh)
         {
-            var refreshToken = await _refreshTokenRepository.GetByIdAsync(userId);
+            var refreshToken = await _refreshTokenRepository.Models.FirstOrDefaultAsync(x => x.Token == refresh);
             return refreshToken;
         }
 

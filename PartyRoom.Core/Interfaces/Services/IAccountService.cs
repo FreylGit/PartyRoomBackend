@@ -7,7 +7,7 @@ namespace PartyRoom.Core.Interfaces.Services
     {
         Task CreateRefreshTokenAsync(RefreshToken refreshToken);
 
-        Task<RefreshToken> GetRefreshTokenAsync(Guid userId);
+        Task<RefreshToken> GetRefreshTokenAsync(string refresh);
 
         Task<ApplicationUser> LoginAsync(UserLoginDTO userLogin);
 

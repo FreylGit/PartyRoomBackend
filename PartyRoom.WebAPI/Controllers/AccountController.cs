@@ -53,8 +53,9 @@ namespace PartyRoom.WebAPI.Controllers
         [HttpPost("RefreshToken")]
         public async Task<IActionResult> RefreshToken()
         {
-            var userId = _jwtService.GetUserIdByToken(HttpContext);
-            var currentRefreshToken = await _accountService.GetRefreshTokenAsync(userId);
+            var refresh = _jwtService.GetRefreshToken(HttpContext);
+            
+            var currentRefreshToken = await _accountService.GetRefreshTokenAsync(refresh);
             if (currentRefreshToken == null)
             {
                 return BadRequest();
@@ -71,7 +72,7 @@ namespace PartyRoom.WebAPI.Controllers
 
             var claims = await _userService.GetClaimsAsync(user);
             var accessToken = _jwtService.CreateAccessToken(user, claims);
-            return Ok(accessToken);
+            return Ok(new { token = accessToken });
         }
 
         private void SetRefreshToken(RefreshToken newRefreshToken)
