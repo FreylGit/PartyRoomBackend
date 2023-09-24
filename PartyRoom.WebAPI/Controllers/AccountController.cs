@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using PartyRoom.Core.DTOs.User;
 using PartyRoom.Core.Entities;
 using PartyRoom.Core.Interfaces.Services;

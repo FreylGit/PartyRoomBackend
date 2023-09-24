@@ -25,5 +25,17 @@ namespace PartyRoom.Infrastructure.Repositories
             var room = await _context.Rooms.FirstOrDefaultAsync(r => r.Link == link);
             return room;
         }
+
+        public async Task<bool> IsAuthorAsync(Guid userId,Guid roomId)
+        {
+            var room = await _context.Rooms.FirstOrDefaultAsync(r => r.Id == roomId && r.AuthorId == userId);
+
+            if(room != null)
+            {
+                return true;
+            }
+
+            return false;
+        }
     }
 }

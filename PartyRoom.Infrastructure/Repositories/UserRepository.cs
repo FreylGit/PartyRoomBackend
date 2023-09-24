@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using PartyRoom.Core.Entities;
 using PartyRoom.Core.Interfaces.Repositories;
 using PartyRoom.Infrastructure.Data;
@@ -35,13 +34,23 @@ namespace PartyRoom.Infrastructure.Repositories
 
         public async Task AddRoleAsync(ApplicationUser user, ApplicationRole role)
         {
-            
+
             await _userManager.AddToRoleAsync(user, role.Name);
+        }
+
+        public async Task<bool> ExistsAsync(Guid userId)
+        {
+            if (await _userManager.FindByIdAsync(userId.ToString()) != null)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         public async Task<ApplicationUser> GetByEmailAsync(string email)
         {
-           var user =  await _userManager.FindByEmailAsync(email);
+            var user = await _userManager.FindByEmailAsync(email);
             return user;
         }
 

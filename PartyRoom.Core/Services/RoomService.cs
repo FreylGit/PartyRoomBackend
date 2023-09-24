@@ -12,11 +12,14 @@ namespace PartyRoom.Core.Services
         private readonly IMapper _mapper;
         private readonly IRoomRepository _roomRepository;
         private readonly IUserRoomRepository _userRoomRepository;
-        public RoomService(IMapper mapper, IRoomRepository roomRepository, IUserRoomRepository userRoomRepository)
+        private readonly IUserRepository _userRepository;
+        public RoomService(IMapper mapper, IRoomRepository roomRepository, IUserRoomRepository userRoomRepository,
+            IUserRepository userRepository)
         {
             _mapper = mapper;
             _roomRepository = roomRepository;
             _userRoomRepository = userRoomRepository;
+            _userRepository = userRepository;
 
         }
 
@@ -46,6 +49,14 @@ namespace PartyRoom.Core.Services
 
         public async Task ConnectToRoomAsync(Guid userId, string link)
         {
+            if (!await _roomRepository.ExistsLinkAsync(link))
+            {
+                throw new ArgumentNullException("Нет такой ссылки");
+            }
+            if (!await _userRepository.ExistsAsync(userId))
+            {
+                throw new ArgumentNullException("Нет такого пользователя");
+            }
             var room = await _roomRepository.GetByLinkAsync(link);
             var userRoom = new UserRoom { Room = room, UserId = userId };
             await _userRoomRepository.AddAsync(userRoom);
@@ -54,7 +65,7 @@ namespace PartyRoom.Core.Services
 
         public async Task CreateAsync(Guid authorId, RoomCreateDTO roomCreate)
         {
-            if(roomCreate == null)
+            if (roomCreate == null)
             {
                 throw new ArgumentNullException("Комната пустая");
             }
@@ -76,7 +87,11 @@ namespace PartyRoom.Core.Services
 
         public async Task<string> GetConnectLinkToRoomAsync(Guid userId, Guid roomId)
         {
-            //TODO: Добавить в репозиторий проверку на то что пользователь автор
+            if (!await _roomRepository.IsAuthorAsync(userId, roomId))
+            {
+                throw new InvalidOperationException("Только создатель комнаты может просмотреть ссылку");
+            }
+
             var room = await _roomRepository.Models.FirstOrDefaultAsync(x => x.AuthorId == userId && x.Id == roomId);
             if (room == null)
             {
