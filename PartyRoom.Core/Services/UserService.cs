@@ -11,10 +11,15 @@ namespace PartyRoom.Core.Services
     public class UserService : IUserService
     {
         private IMapper _mapper;
+
         private readonly IUserRepository _userRepository;
+
         private readonly IRoleRepository _roleRepository;
+
         private readonly IProfileRepository _profileRepository;
+
         private readonly IProfileService _profileService;
+
         public UserService(IMapper mapper, IUserRepository userRepository, IRoleRepository roleRepository,
             IProfileRepository profileRepository, IProfileService profileService)
         {
@@ -24,13 +29,23 @@ namespace PartyRoom.Core.Services
             _profileRepository = profileRepository;
             _profileService = profileService ;
         }
+
         public async Task CreateUserAsync(UserRegistrationDTO user)
         {
             if (user == null)
             {
                 throw new ArgumentNullException("user");
             }
+            if(await _userRepository.ExistsUsernameAsync(user.UserName) || await _userRepository.ExistsEmailAsync(user.Email))
+            {
+                throw new InvalidOperationException("Имя пользователя или email уже существуют");
+            }
             var userMap = _mapper.Map<ApplicationUser>(user);
+
+            if(userMap == null)
+            {
+                throw new InvalidCastException("Ошибка приведения типа");
+            }
 
             await _userRepository.AddAsync(userMap, user.Password);
             var role = await _roleRepository.Models.FirstOrDefaultAsync(r => r.Name.ToLower() == "user");
@@ -44,7 +59,6 @@ namespace PartyRoom.Core.Services
                 ImagePath = "default.png"
             });
             await _profileRepository.SaveChangesAsync();
-
         }
 
         public async Task DeleteUserAsync(ApplicationUser user)
@@ -83,7 +97,17 @@ namespace PartyRoom.Core.Services
             {
                 throw new ArgumentNullException("user");
             }
+
+            if (!await _userRepository.ExistsUsernameAsync(model.UserRegistration.UserName) || !await _userRepository.ExistsEmailAsync(model.UserRegistration.Email))
+            {
+                throw new InvalidOperationException("Имя пользователя или email уже существуют");
+            }
+
             var userMap = _mapper.Map<ApplicationUser>(model.UserRegistration);
+            if (userMap == null)
+            {
+                throw new InvalidCastException("Ошибка приведения типа");
+            }
 
             await _userRepository.AddAsync(userMap, model.UserRegistration.Password);
 

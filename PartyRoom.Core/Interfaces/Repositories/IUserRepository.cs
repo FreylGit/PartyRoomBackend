@@ -17,6 +17,8 @@ namespace PartyRoom.Core.Interfaces.Repositories
 
         Task<bool> ExistsAsync(Guid userId);
 
-        
+        Task<bool> ExistsUsernameAsync(string username);
+
+        Task<bool> ExistsEmailAsync(string email);
     }
 }

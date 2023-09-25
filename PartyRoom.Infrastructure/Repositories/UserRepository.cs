@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using PartyRoom.Core.Entities;
 using PartyRoom.Core.Interfaces.Repositories;
 using PartyRoom.Infrastructure.Data;
@@ -45,6 +46,24 @@ namespace PartyRoom.Infrastructure.Repositories
                 return true;
             }
 
+            return false;
+        }
+
+        public async Task<bool> ExistsEmailAsync(string email)
+        {
+            if (await _context.Users.AnyAsync(x => x.Email == email))
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public async Task<bool> ExistsUsernameAsync(string username)
+        {
+            if(await _context.Users.AnyAsync(x=>x.UserName == username))
+            {
+                return true;
+            }
             return false;
         }
 
