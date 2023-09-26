@@ -11,6 +11,17 @@ namespace PartyRoom.Infrastructure.Repositories
         {
         }
 
+        public async Task<bool> ConsistsUserAsync(Guid userId, Guid roomId)
+        {
+            var userRoom = await _context.UserRoom.FirstOrDefaultAsync(x => x.UserId == userId && x.RoomId == userId);
+            if(userRoom != null)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         public async Task<bool> ExistsAsync(Guid userId, Guid roomId)
         {
             var userRoom = await _context.UserRoom.FirstOrDefaultAsync(ur => ur.UserId == userId && ur.RoomId == roomId);

@@ -11,6 +11,15 @@ namespace PartyRoom.Infrastructure.Repositories
         {
         }
 
+        public async Task<bool> ExistsAsync(Guid roomId)
+        {
+            if (await _context.Rooms.AnyAsync(x => x.Id == roomId))
+            {
+                return true;
+            }
+            return false;
+        }
+
         public async Task<bool> ExistsLinkAsync(string slug)
         {
             if (await _context.Rooms.AnyAsync(r => r.Link == slug))
@@ -26,11 +35,11 @@ namespace PartyRoom.Infrastructure.Repositories
             return room;
         }
 
-        public async Task<bool> IsAuthorAsync(Guid userId,Guid roomId)
+        public async Task<bool> IsAuthorAsync(Guid userId, Guid roomId)
         {
             var room = await _context.Rooms.FirstOrDefaultAsync(r => r.Id == roomId && r.AuthorId == userId);
 
-            if(room != null)
+            if (room != null)
             {
                 return true;
             }

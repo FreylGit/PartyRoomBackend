@@ -57,7 +57,18 @@ namespace PartyRoom.Core.Services
             {
                 throw new ArgumentNullException("Нет такого пользователя");
             }
+
             var room = await _roomRepository.GetByLinkAsync(link);
+
+            if(room == null)
+            {
+                throw new ArgumentNullException("Ссылка на комнату недействительна");
+            }
+            if(await _userRoomRepository.ConsistsUserAsync(userId, room.Id))
+            {
+                throw new InvalidOperationException("Пользователь уже состоит в этой комнате");
+            }
+
             var userRoom = new UserRoom { Room = room, UserId = userId };
             await _userRoomRepository.AddAsync(userRoom);
             await _userRoomRepository.SaveChangesAsync();

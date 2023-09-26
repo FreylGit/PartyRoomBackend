@@ -9,5 +9,7 @@ namespace PartyRoom.Core.Interfaces.Repositories
         Task<Room> GetByLinkAsync(string link);
 
         Task<bool> IsAuthorAsync(Guid userId,Guid roomId);
+
+        Task<bool> ExistsAsync(Guid roomId);
     }
 }
