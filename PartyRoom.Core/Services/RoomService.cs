@@ -190,5 +190,32 @@ namespace PartyRoom.Core.Services
             }
             await _userRoomRepository.SaveChangesAsync();
         }
+
+        public async Task DisconnectUserAsync(Guid userId, Guid roomId)
+        {
+            if(! await _userRoomRepository.ConsistsUserAsync(userId, roomId))
+            {
+                throw new ArgumentNullException("Пользователь не состоит в комнате");
+            }
+            var userRoom = await _userRoomRepository.Models.FirstOrDefaultAsync(x => x.RoomId == roomId && x.UserId == userId);
+            _userRoomRepository.Delete(userRoom!);
+            await _userRoomRepository.SaveChangesAsync();
+        }
+
+        public async Task DisconnectUserAsync(Guid userId, Guid roomId, Guid participantId)
+        {
+            if (!await _roomRepository.IsAuthorAsync(userId,roomId))
+            {
+                throw new InvalidOperationException("Ползователь не админ, чтобы удалить другого пользователя");
+            }
+
+            if (!await _userRoomRepository.ConsistsUserAsync(participantId, roomId))
+            {
+                throw new ArgumentNullException("Пользователь не состоит в комнате");
+            }
+            var userRoom = await _userRoomRepository.Models.FirstOrDefaultAsync(x => x.RoomId == roomId && x.UserId == participantId);
+            _userRoomRepository.Delete(userRoom!);
+            await _userRoomRepository.SaveChangesAsync();
+        }
     }
 }
