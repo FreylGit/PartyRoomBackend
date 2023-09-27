@@ -11,6 +11,7 @@ namespace PartyRoom.WebAPI.MappingProfiles
             CreateMap<RoomCreateDTO, Room>();
             CreateMap<Room, RoomInfoDTO>();
             CreateMap<Room, RoomItemDTO>();
+            CreateMap<RoomUpdateDTO, Room>();
         }
     }
 }

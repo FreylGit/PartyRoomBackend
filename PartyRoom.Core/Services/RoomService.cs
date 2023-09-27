@@ -44,7 +44,7 @@ namespace PartyRoom.Core.Services
 
                 // Ожидание некоторое время перед следующей проверкой 
                 await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
-            }
+                    }
         }
 
         public async Task ConnectToRoomAsync(Guid userId, string link)
@@ -220,7 +220,7 @@ namespace PartyRoom.Core.Services
 
         public async Task DeleteAsync(Guid userId, Guid roomId)
         {
-            if(! await _roomRepository.ExistsAsync(roomId))
+            if (!await _roomRepository.ExistsAsync(roomId))
             {
                 throw new InvalidOperationException("Комната не существует");
             }
@@ -231,12 +231,34 @@ namespace PartyRoom.Core.Services
             }
             var room = await _roomRepository.GetByIdAsync(roomId);
             var userRooms = _userRoomRepository.Models.Where(x => x.RoomId == roomId);
-            foreach(var userRoom in userRooms)
+            foreach (var userRoom in userRooms)
             {
                 _userRoomRepository.Delete(userRoom);
             }
             await _userRoomRepository.SaveChangesAsync();
             _roomRepository.Delete(room);
+            await _roomRepository.SaveChangesAsync();
+        }
+
+        public async Task UpdateAsync(Guid userId, Guid roomId, RoomUpdateDTO model)
+        {
+            if (!await _roomRepository.ExistsAsync(roomId))
+            {
+                throw new ArgumentNullException("Комната не существует");
+            }
+            if (!await _roomRepository.IsAuthorAsync(userId, roomId))
+            {
+                throw new InvalidOperationException("Пользователь не является создателем");
+            }
+
+            var roomFind = await _roomRepository.GetByIdAsync(roomId);
+            roomFind.Name = model.Name ?? roomFind.Name;
+            roomFind.Type = model.Type ?? roomFind.Type;
+            roomFind.Price = model.Price ?? roomFind.Price;
+            roomFind.StartDate = model.StartDate ?? roomFind.StartDate;
+            roomFind.FinishDate = model.FinishDate ?? roomFind.FinishDate;
+            _roomRepository.Update(roomFind);
+
             await _roomRepository.SaveChangesAsync();
         }
     }

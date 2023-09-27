@@ -22,5 +22,7 @@ namespace PartyRoom.Core.Interfaces.Services
 
         Task DeleteAsync(Guid userId, Guid roomId);
 
+        Task UpdateAsync(Guid userId,Guid roomId ,RoomUpdateDTO model);
+
     }
 }

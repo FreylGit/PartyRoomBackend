@@ -89,5 +89,14 @@ namespace PartyRoom.WebAPI.Controllers
             await _roomService.DisconnectUserAsync(userId, roomId);
             return Ok();
         }
+
+        [HttpPut]
+        [Authorize(RoleConstants.RoleUser)]
+        public async Task<IActionResult> Update(Guid roomId,RoomUpdateDTO model)
+        {
+            var userId = _jwtService.GetUserIdByToken(HttpContext);
+            await _roomService.UpdateAsync(userId, roomId, model);
+            return Ok();
+        }
     }
 }
