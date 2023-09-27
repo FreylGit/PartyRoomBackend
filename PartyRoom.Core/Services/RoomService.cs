@@ -60,11 +60,11 @@ namespace PartyRoom.Core.Services
 
             var room = await _roomRepository.GetByLinkAsync(link);
 
-            if(room == null)
+            if (room == null)
             {
                 throw new ArgumentNullException("Ссылка на комнату недействительна");
             }
-            if(await _userRoomRepository.ConsistsUserAsync(userId, room.Id))
+            if (await _userRoomRepository.ConsistsUserAsync(userId, room.Id))
             {
                 throw new InvalidOperationException("Пользователь уже состоит в этой комнате");
             }
@@ -193,7 +193,7 @@ namespace PartyRoom.Core.Services
 
         public async Task DisconnectUserAsync(Guid userId, Guid roomId)
         {
-            if(! await _userRoomRepository.ConsistsUserAsync(userId, roomId))
+            if (!await _userRoomRepository.ConsistsUserAsync(userId, roomId))
             {
                 throw new ArgumentNullException("Пользователь не состоит в комнате");
             }
@@ -204,7 +204,7 @@ namespace PartyRoom.Core.Services
 
         public async Task DisconnectUserAsync(Guid userId, Guid roomId, Guid participantId)
         {
-            if (!await _roomRepository.IsAuthorAsync(userId,roomId))
+            if (!await _roomRepository.IsAuthorAsync(userId, roomId))
             {
                 throw new InvalidOperationException("Ползователь не админ, чтобы удалить другого пользователя");
             }
@@ -216,6 +216,28 @@ namespace PartyRoom.Core.Services
             var userRoom = await _userRoomRepository.Models.FirstOrDefaultAsync(x => x.RoomId == roomId && x.UserId == participantId);
             _userRoomRepository.Delete(userRoom!);
             await _userRoomRepository.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(Guid userId, Guid roomId)
+        {
+            if(! await _roomRepository.ExistsAsync(roomId))
+            {
+                throw new InvalidOperationException("Комната не существует");
+            }
+
+            if (!await _roomRepository.IsAuthorAsync(userId, roomId))
+            {
+                throw new InvalidOperationException("Пользователь не создатель комнаты, чтобы удалить ее");
+            }
+            var room = await _roomRepository.GetByIdAsync(roomId);
+            var userRooms = _userRoomRepository.Models.Where(x => x.RoomId == roomId);
+            foreach(var userRoom in userRooms)
+            {
+                _userRoomRepository.Delete(userRoom);
+            }
+            await _userRoomRepository.SaveChangesAsync();
+            _roomRepository.Delete(room);
+            await _roomRepository.SaveChangesAsync();
         }
     }
 }

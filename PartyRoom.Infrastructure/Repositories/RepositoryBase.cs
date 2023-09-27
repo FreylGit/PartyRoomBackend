@@ -31,7 +31,7 @@ namespace PartyRoom.Infrastructure.Repositories
 
         public virtual void Delete(T entity)
         {
-            _context.Entry(entity).State = EntityState.Detached;
+           // _context.Entry(entity).State = EntityState.Detached;
             _dbSet.Remove(entity);
         }
 

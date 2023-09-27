@@ -66,6 +66,15 @@ namespace PartyRoom.WebAPI.Controllers
             return Ok(link);
         }
 
+        [HttpDelete]
+        [Authorize(RoleConstants.RoleUser)]
+        public async Task<IActionResult> Delete(Guid roomId)
+        {
+            var userId = _jwtService.GetUserIdByToken(HttpContext);
+            await _roomService.DeleteAsync(userId, roomId);
+            return Ok();
+        }
+
         [HttpDelete("DisconnectUser")]
         [Authorize(RoleConstants.RoleUser)]
         public async Task<IActionResult> DisconnectUser(Guid roomId,Guid? participantId)

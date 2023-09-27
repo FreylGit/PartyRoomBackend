@@ -20,5 +20,7 @@ namespace PartyRoom.Core.Interfaces.Services
 
         Task DisconnectUserAsync(Guid userId, Guid roomId,Guid participantId);
 
+        Task DeleteAsync(Guid userId, Guid roomId);
+
     }
 }
