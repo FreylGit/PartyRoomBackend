@@ -14,6 +14,7 @@ namespace PartyRoom.WebAPI.Extensions
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IProfileService, ProfileService>();
             services.AddScoped<IImageService, ImageService>();
+            services.AddScoped<INotificationService, NotificationService>();
         }
     }
 }

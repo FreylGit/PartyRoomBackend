@@ -19,9 +19,11 @@
   <ItemGroup>
     <None Remove="DTOs\Tag\" />
     <None Remove="DTOs\Error\" />
+    <None Remove="DTOs\Noifications\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DTOs\Tag\" />
     <Folder Include="DTOs\Error\" />
+    <Folder Include="DTOs\Noifications\" />
   </ItemGroup>
 </Project>

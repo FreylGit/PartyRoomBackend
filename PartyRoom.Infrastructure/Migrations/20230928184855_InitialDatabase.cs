@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace PartyRoom.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InitialDatabase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -35,8 +35,8 @@ namespace PartyRoom.Infrastructure.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     FirstName = table.Column<string>(type: "text", nullable: false),
                     LastName = table.Column<string>(type: "text", nullable: false),
-                    DateOfBirth = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    DateRegistration = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    DateOfBirth = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    DateRegistration = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
@@ -169,8 +169,8 @@ namespace PartyRoom.Infrastructure.Migrations
                 {
                     ApplicationUserId = table.Column<Guid>(type: "uuid", nullable: false),
                     Token = table.Column<string>(type: "text", nullable: false),
-                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Expires = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    Created = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    Expires = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -194,8 +194,8 @@ namespace PartyRoom.Infrastructure.Migrations
                     Link = table.Column<string>(type: "text", nullable: false),
                     Price = table.Column<decimal>(type: "numeric", nullable: false),
                     IsStarted = table.Column<bool>(type: "boolean", nullable: false),
-                    StartDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    FinishDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    StartDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    FinishDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -215,7 +215,8 @@ namespace PartyRoom.Infrastructure.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
                     Important = table.Column<bool>(type: "boolean", nullable: false),
-                    ApplicationUserId = table.Column<Guid>(type: "uuid", nullable: false)
+                    ApplicationUserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    IsLike = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -243,6 +244,38 @@ namespace PartyRoom.Infrastructure.Migrations
                         name: "FK_UserProfiles_AspNetUsers_ApplicationUserId",
                         column: x => x.ApplicationUserId,
                         principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "InviteRooms",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    AddresseeUserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    RoomId = table.Column<Guid>(type: "uuid", nullable: false),
+                    SenderUserId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_InviteRooms", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_InviteRooms_AspNetUsers_AddresseeUserId",
+                        column: x => x.AddresseeUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_InviteRooms_AspNetUsers_SenderUserId",
+                        column: x => x.SenderUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_InviteRooms_Rooms_RoomId",
+                        column: x => x.RoomId,
+                        principalTable: "Rooms",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -277,8 +310,8 @@ namespace PartyRoom.Infrastructure.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { new Guid("0a62b2d8-f81a-4fa2-9849-e9ca354ae770"), null, "Admin", "ADMIN" },
-                    { new Guid("b0eb91e1-32a7-492d-872c-9e351ed02892"), null, "User", "USER" }
+                    { new Guid("95f35cc3-323f-4b37-a560-a67f1ccc0739"), null, "User", "USER" },
+                    { new Guid("ae10d764-8a0d-4be8-81e1-d8e1352e96bf"), null, "Admin", "ADMIN" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -319,6 +352,21 @@ namespace PartyRoom.Infrastructure.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_InviteRooms_AddresseeUserId",
+                table: "InviteRooms",
+                column: "AddresseeUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_InviteRooms_RoomId",
+                table: "InviteRooms",
+                column: "RoomId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_InviteRooms_SenderUserId",
+                table: "InviteRooms",
+                column: "SenderUserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Rooms_AuthorId",
                 table: "Rooms",
                 column: "AuthorId");
@@ -351,6 +399,9 @@ namespace PartyRoom.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "InviteRooms");
 
             migrationBuilder.DropTable(
                 name: "RefreshTokens");

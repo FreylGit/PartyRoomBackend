@@ -54,6 +54,7 @@ namespace PartyRoom.WebAPI.Extensions
 
             }
         }
+
         private async Task HandleExceptionAsync(HttpContext context, string message, HttpStatusCode statusCode)
         {
             _logger.LogError(message);

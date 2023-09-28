@@ -7,9 +7,14 @@ namespace PartyRoom.Infrastructure.Data
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>
     {
         public DbSet<UserProfile> UserProfiles { get; set; }
+
         public DbSet<RefreshToken> RefreshTokens { get; set; }
+
         public DbSet<Room> Rooms { get; set; }
+
         public DbSet<UserRoom> UserRoom { get; set; }
+
+        public DbSet<InviteRoom> InviteRooms { get; set; }
 
         public DbSet<Tag> Tags { get; set; }
 

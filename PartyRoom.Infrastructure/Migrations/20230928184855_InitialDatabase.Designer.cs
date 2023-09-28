@@ -12,8 +12,8 @@ using PartyRoom.Infrastructure.Data;
 namespace PartyRoom.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230910204412_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20230928184855_InitialDatabase")]
+    partial class InitialDatabase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -157,13 +157,13 @@ namespace PartyRoom.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("0a62b2d8-f81a-4fa2-9849-e9ca354ae770"),
+                            Id = new Guid("ae10d764-8a0d-4be8-81e1-d8e1352e96bf"),
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = new Guid("b0eb91e1-32a7-492d-872c-9e351ed02892"),
+                            Id = new Guid("95f35cc3-323f-4b37-a560-a67f1ccc0739"),
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -183,10 +183,10 @@ namespace PartyRoom.Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("DateOfBirth")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("DateRegistration")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -248,16 +248,42 @@ namespace PartyRoom.Infrastructure.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("PartyRoom.Core.Entities.InviteRoom", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("AddresseeUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("RoomId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("SenderUserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AddresseeUserId");
+
+                    b.HasIndex("RoomId");
+
+                    b.HasIndex("SenderUserId");
+
+                    b.ToTable("InviteRooms");
+                });
+
             modelBuilder.Entity("PartyRoom.Core.Entities.RefreshToken", b =>
                 {
                     b.Property<Guid>("ApplicationUserId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("Expires")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Token")
                         .IsRequired()
@@ -278,7 +304,7 @@ namespace PartyRoom.Infrastructure.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("FinishDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("IsStarted")
                         .HasColumnType("boolean");
@@ -295,7 +321,7 @@ namespace PartyRoom.Infrastructure.Migrations
                         .HasColumnType("numeric");
 
                     b.Property<DateTime>("StartDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Type")
                         .IsRequired()
@@ -318,6 +344,9 @@ namespace PartyRoom.Infrastructure.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<bool>("Important")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsLike")
                         .HasColumnType("boolean");
 
                     b.Property<string>("Name")
@@ -414,6 +443,33 @@ namespace PartyRoom.Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("PartyRoom.Core.Entities.InviteRoom", b =>
+                {
+                    b.HasOne("PartyRoom.Core.Entities.ApplicationUser", "AddresseeUser")
+                        .WithMany()
+                        .HasForeignKey("AddresseeUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PartyRoom.Core.Entities.Room", "Room")
+                        .WithMany()
+                        .HasForeignKey("RoomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PartyRoom.Core.Entities.ApplicationUser", "SenderUser")
+                        .WithMany()
+                        .HasForeignKey("SenderUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AddresseeUser");
+
+                    b.Navigation("Room");
+
+                    b.Navigation("SenderUser");
                 });
 
             modelBuilder.Entity("PartyRoom.Core.Entities.RefreshToken", b =>

@@ -8,6 +8,8 @@ namespace PartyRoom.Core.Interfaces.Services
 
         Task ConnectToRoomAsync(Guid userId, string link);
 
+        Task ConnectToRoomAsync(Guid userId, Guid roomId);
+
         Task<string> GetConnectLinkToRoomAsync(Guid userId, Guid roomId);
 
         Task<RoomInfoDTO> GetRoomAsync(Guid userId, Guid roomId);

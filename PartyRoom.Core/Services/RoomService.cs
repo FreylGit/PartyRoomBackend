@@ -261,5 +261,32 @@ namespace PartyRoom.Core.Services
 
             await _roomRepository.SaveChangesAsync();
         }
+
+        public async Task ConnectToRoomAsync(Guid userId, Guid roomId)
+        {
+            if (!await _roomRepository.ExistsAsync(roomId))
+            {
+                throw new ArgumentNullException("Нет такой ссылки");
+            }
+            if (!await _userRepository.ExistsAsync(userId))
+            {
+                throw new ArgumentNullException("Нет такого пользователя");
+            }
+
+            var room = await _roomRepository.GetByIdAsync(roomId);
+
+            if (room == null)
+            {
+                throw new ArgumentNullException("Ссылка на комнату недействительна");
+            }
+            if (await _userRoomRepository.ConsistsUserAsync(userId, room.Id))
+            {
+                throw new InvalidOperationException("Пользователь уже состоит в этой комнате");
+            }
+
+            var userRoom = new UserRoom { Room = room, UserId = userId };
+            await _userRoomRepository.AddAsync(userRoom);
+            await _userRoomRepository.SaveChangesAsync();
+        }
     }
 }

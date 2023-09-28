@@ -154,13 +154,13 @@ namespace PartyRoom.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("ac13340e-1914-4e47-98bf-eef308606a2f"),
+                            Id = new Guid("ae10d764-8a0d-4be8-81e1-d8e1352e96bf"),
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = new Guid("a3c362e0-49e1-4e14-8673-2b7acc69dc50"),
+                            Id = new Guid("95f35cc3-323f-4b37-a560-a67f1ccc0739"),
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -243,6 +243,32 @@ namespace PartyRoom.Infrastructure.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("PartyRoom.Core.Entities.InviteRoom", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("AddresseeUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("RoomId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("SenderUserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AddresseeUserId");
+
+                    b.HasIndex("RoomId");
+
+                    b.HasIndex("SenderUserId");
+
+                    b.ToTable("InviteRooms");
                 });
 
             modelBuilder.Entity("PartyRoom.Core.Entities.RefreshToken", b =>
@@ -414,6 +440,33 @@ namespace PartyRoom.Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("PartyRoom.Core.Entities.InviteRoom", b =>
+                {
+                    b.HasOne("PartyRoom.Core.Entities.ApplicationUser", "AddresseeUser")
+                        .WithMany()
+                        .HasForeignKey("AddresseeUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PartyRoom.Core.Entities.Room", "Room")
+                        .WithMany()
+                        .HasForeignKey("RoomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PartyRoom.Core.Entities.ApplicationUser", "SenderUser")
+                        .WithMany()
+                        .HasForeignKey("SenderUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AddresseeUser");
+
+                    b.Navigation("Room");
+
+                    b.Navigation("SenderUser");
                 });
 
             modelBuilder.Entity("PartyRoom.Core.Entities.RefreshToken", b =>

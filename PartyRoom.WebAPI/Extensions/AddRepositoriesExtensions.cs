@@ -17,6 +17,7 @@ namespace PartyRoom.WebAPI.Extensions
             services.AddScoped<IRoomRepository, RoomRepository>();
             services.AddScoped<IUserRoomRepository, UserRoomRepository>();
             services.AddScoped<ITagRepository, TagRepository>();
+            services.AddScoped<IInviteRoomRepository, InviteRoomRepository>();
         }
     }
 }
