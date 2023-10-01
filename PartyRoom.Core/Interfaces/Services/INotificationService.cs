@@ -5,7 +5,7 @@ namespace PartyRoom.Core.Interfaces.Services
 {
 	public interface INotificationService
 	{
-		Task PushInvateRoomAsync(Guid senderId,Guid addresseeId,Guid roomId);
+		Task PushInvateRoomAsync(Guid senderId, InviteCreateDTO model);
 
 		Task<List<InviteRoomDTO>> GetAllInviteAsync(Guid userId);
 

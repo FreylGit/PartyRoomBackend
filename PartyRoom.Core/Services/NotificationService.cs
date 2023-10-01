@@ -15,15 +15,17 @@ namespace PartyRoom.Core.Services
         private readonly IRoomRepository _roomRepository;
         private readonly IUserRoomRepository _userRoomRepository;
         private readonly IRoomService _roomService;
+        private readonly IUserRepository _userRepository;
 
 		public NotificationService(IMapper mapper,IInviteRoomRepository inviteRoomRepository,IRoomRepository roomRepository,
-            IUserRoomRepository userRoomRepository, IRoomService roomService)
+            IUserRoomRepository userRoomRepository, IRoomService roomService, IUserRepository userRepository)
 		{
             _mapper = mapper;
             _inviteRoomRepository = inviteRoomRepository;
             _roomRepository = roomRepository;
             _userRoomRepository = userRoomRepository;
             _roomService = roomService;
+            _userRepository = userRepository;
 		}
 
         public async Task<List<InviteRoomDTO>> GetAllInviteAsync(Guid userId)
@@ -51,18 +53,20 @@ namespace PartyRoom.Core.Services
             
         }
 
-        public async Task PushInvateRoomAsync(Guid senderId, Guid addresseeId, Guid roomId)
+        public async Task PushInvateRoomAsync(Guid senderId, InviteCreateDTO model)
         {
 
-            if(! await _roomRepository.IsAuthorAsync(senderId, roomId))
+            if(! await _roomRepository.IsAuthorAsync(senderId, model.RoomId))
             {
                 throw new InvalidOperationException("Только создатель комнаты может приглашать");
             }
-            if( await _userRoomRepository.ExistsAsync(addresseeId, roomId))
+
+            var addresseeUser = await _userRepository.GetByUserNameAsync(model.UserName);
+            if( await _userRoomRepository.ExistsAsync(addresseeUser.Id, model.RoomId))
             {
                 throw new InvalidOperationException("Пользователь уже состоит в комнате");
             }
-            if(await _inviteRoomRepository.ExistsAsync(addresseeId, roomId))
+            if(await _inviteRoomRepository.ExistsAsync(addresseeUser.Id, model.RoomId))
             {
                 throw new InvalidOperationException("Пользователю уже отправлено приглашение");
             }
@@ -70,8 +74,8 @@ namespace PartyRoom.Core.Services
             var invite = new InviteRoom
             {
                 SenderUserId = senderId,
-                AddresseeUserId = addresseeId,
-                RoomId = roomId
+                AddresseeUserId = addresseeUser.Id,
+                RoomId = model.RoomId
             };
             await _inviteRoomRepository.AddAsync(invite);
             await _inviteRoomRepository.SaveChangesAsync();

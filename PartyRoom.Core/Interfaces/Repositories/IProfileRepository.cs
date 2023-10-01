@@ -5,5 +5,7 @@ namespace PartyRoom.Core.Interfaces.Repositories
     public interface IProfileRepository : IRepository<UserProfile>
     {
         Task<ApplicationUser> GetUserByIdAsync(Guid userId);
+
+        Task<ApplicationUser> GetUserByUsernameAsync(string username);
     }
 }

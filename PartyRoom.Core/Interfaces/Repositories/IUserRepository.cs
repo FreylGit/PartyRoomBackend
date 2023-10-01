@@ -7,6 +7,8 @@ namespace PartyRoom.Core.Interfaces.Repositories
     {
         Task<ApplicationUser> GetByEmailAsync(string email);
 
+        Task<ApplicationUser> GetByUserNameAsync(string username);
+
         Task AddAsync(ApplicationUser user,string password);
 
         Task AddClaimAsync(ApplicationUser user,Claim  claim);

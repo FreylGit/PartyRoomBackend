@@ -31,7 +31,7 @@ namespace PartyRoom.WebAPI.Controllers
 
         [HttpPost("ConnectToRoom")]
         [Authorize(RoleConstants.RoleUser)]
-        public async Task<IActionResult> ConnectToRoom(string link)
+        public async Task<IActionResult> ConnectToRoom([FromQuery]string link)
         {
             var userId = _jwtService.GetUserIdByToken(HttpContext);
             await _roomService.ConnectToRoomAsync(userId, link);
@@ -79,6 +79,7 @@ namespace PartyRoom.WebAPI.Controllers
         [Authorize(RoleConstants.RoleUser)]
         public async Task<IActionResult> DisconnectUser(Guid roomId,Guid? participantId)
         {
+            //TODO: Добавить дисконект по username
             var userId = _jwtService.GetUserIdByToken(HttpContext);
             if (participantId != null)
             {
@@ -97,6 +98,14 @@ namespace PartyRoom.WebAPI.Controllers
             var userId = _jwtService.GetUserIdByToken(HttpContext);
             await _roomService.UpdateAsync(userId, roomId, model);
             return Ok();
+        }
+
+
+        [HttpGet("Users")]
+        public async Task<IActionResult> GetUsersFromRoom(Guid roomId)
+        {
+            var users = await _roomService.GetUsersFromRoomAsync(roomId);
+            return Ok(users);
         }
     }
 }

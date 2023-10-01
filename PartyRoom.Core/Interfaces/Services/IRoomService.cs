@@ -1,4 +1,5 @@
 ﻿using PartyRoom.Core.DTOs.Room;
+using PartyRoom.Core.DTOs.User;
 
 namespace PartyRoom.Core.Interfaces.Services
 {
@@ -26,5 +27,6 @@ namespace PartyRoom.Core.Interfaces.Services
 
         Task UpdateAsync(Guid userId,Guid roomId ,RoomUpdateDTO model);
 
+        Task<IEnumerable<UserPublicDTO>> GetUsersFromRoomAsync(Guid room);
     }
 }

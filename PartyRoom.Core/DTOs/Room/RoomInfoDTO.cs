@@ -15,5 +15,13 @@
         public DateTime FinishDate { get; set; }
 
         public int QuantityParticipant { get; set; }
+
+        public bool IsAuthor { get; set; } = false;
+
+        public bool IsStarted { get; set; }
+
+        public string? Link { get; set; }
+
+        public string? DestinationUserName { get; set; }
     }
 }

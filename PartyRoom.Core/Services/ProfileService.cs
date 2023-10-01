@@ -91,6 +91,13 @@ namespace PartyRoom.Core.Services
             return userMap;
         }
 
+        public async Task<UserPublicDTO> GetProfilePublicAsync(string username)
+        {
+            var userFind = await _profileRepository.GetUserByUsernameAsync(username);
+            var userMap = _mapper.Map<UserPublicDTO>(userFind);
+            return userMap;
+        }
+
         public async Task UpdateImageAsync(Guid userId, IFormFile image)
         {
             var userProfile = await _profileRepository.GetByIdAsync(userId);

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PartyRoom.Core.Constants;
-using PartyRoom.Core.Interfaces.Repositories;
+using PartyRoom.Core.DTOs.Noifications;
 using PartyRoom.Core.Interfaces.Services;
 using PartyRoom.WebAPI.Services;
 
@@ -21,10 +21,11 @@ namespace PartyRoom.WebAPI.Controllers
 
         [HttpPost("PushInvite")]
         [Authorize(RoleConstants.RoleUser)]
-        public async Task<IActionResult> PushInviteToRoom(Guid roomId, Guid addresseeId)
+        public async Task<IActionResult> PushInviteToRoom(InviteCreateDTO model)
         {
             var userId = _jwtService.GetUserIdByToken(HttpContext);
-            await _notificationService.PushInvateRoomAsync(userId, addresseeId, roomId);
+            
+            await _notificationService.PushInvateRoomAsync(userId,model);
             return Ok();
         }
 

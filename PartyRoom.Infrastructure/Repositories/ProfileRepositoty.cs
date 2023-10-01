@@ -13,13 +13,19 @@ namespace PartyRoom.Infrastructure.Repositories
 
         public override async Task<UserProfile> GetByIdAsync(Guid userId)
         {
-            ApplicationUser userProfile = _context.Users.Where(p => p.Id == userId).Include(p => p.UserProfile).FirstOrDefault();
+            ApplicationUser userProfile = await _context.Users.Where(p => p.Id == userId).Include(p => p.UserProfile).FirstOrDefaultAsync();
             return userProfile.UserProfile;
         }
 
         public async Task<ApplicationUser> GetUserByIdAsync(Guid userId)
         {
             var userProfile = await _context.Users.Where(p => p.Id == userId).Include(p => p.UserProfile).Include(x=>x.Tags).FirstOrDefaultAsync();
+            return userProfile;
+        }
+
+        public async Task<ApplicationUser> GetUserByUsernameAsync(string username)
+        {
+            var userProfile = await _context.Users.Where(p => p.UserName.ToLower() == username.ToLower()).Include(p => p.UserProfile).Include(x => x.Tags).FirstOrDefaultAsync();
             return userProfile;
         }
     }

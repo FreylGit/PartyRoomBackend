@@ -33,11 +33,11 @@ namespace PartyRoom.WebAPI.Controllers
             return Ok(user);
         }
 
-        [HttpGet("{userId}")]
+        [HttpGet("{username}")]
         [Authorize(RoleConstants.RoleUser)]
-        public async Task<IActionResult> Get(Guid userId)
+        public async Task<IActionResult> Get(string username)
         {
-            var user = await _profileService.GetProfilePublicAsync(userId);
+            var user = await _profileService.GetProfilePublicAsync(username);
             return Ok(user);
         }
 
@@ -77,6 +77,7 @@ namespace PartyRoom.WebAPI.Controllers
             return Ok();
 
         }
+
 
     }
 }

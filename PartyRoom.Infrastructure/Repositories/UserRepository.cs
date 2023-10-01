@@ -73,6 +73,12 @@ namespace PartyRoom.Infrastructure.Repositories
             return user;
         }
 
+        public async Task<ApplicationUser> GetByUserNameAsync(string username)
+        {
+            var user = await _userManager.FindByNameAsync(username);
+            return user;
+        }
+
         public async Task<List<Claim>> GetClaimsAsync(ApplicationUser user)
         {
             var claims = await _userManager.GetClaimsAsync(user);

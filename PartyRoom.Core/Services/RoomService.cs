@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using PartyRoom.Core.DTOs.Room;
+using PartyRoom.Core.DTOs.User;
 using PartyRoom.Core.Entities;
 using PartyRoom.Core.Interfaces.Repositories;
 using PartyRoom.Core.Interfaces.Services;
@@ -13,13 +14,16 @@ namespace PartyRoom.Core.Services
         private readonly IRoomRepository _roomRepository;
         private readonly IUserRoomRepository _userRoomRepository;
         private readonly IUserRepository _userRepository;
+        private readonly IProfileRepository _profileRepository;
+
         public RoomService(IMapper mapper, IRoomRepository roomRepository, IUserRoomRepository userRoomRepository,
-            IUserRepository userRepository)
+            IUserRepository userRepository,IProfileRepository profileRepository)
         {
             _mapper = mapper;
             _roomRepository = roomRepository;
             _userRoomRepository = userRoomRepository;
             _userRepository = userRepository;
+            _profileRepository = profileRepository;
 
         }
 
@@ -121,9 +125,20 @@ namespace PartyRoom.Core.Services
             }
             var room = await _roomRepository.GetByIdAsync(roomId);
             var roomMap = _mapper.Map<RoomInfoDTO>(room);
-
+            if(userId == room.AuthorId)
+            {
+                roomMap.IsAuthor = true;
+            }
+            else
+            {
+                roomMap.Link = null;
+            }
             var userRoom = await _userRoomRepository.GetByIdAsync(userId, roomId);
-            roomMap.DestinationUserId = userRoom.DestinationUserId;
+            if (room.IsStarted)
+            {
+                roomMap.DestinationUserId = userRoom.DestinationUserId;
+                roomMap.DestinationUserName = _userRepository.Models.FirstOrDefault(x => x.Id == roomMap.DestinationUserId)?.UserName;
+            }
             var quantity = _userRoomRepository.Models.Where(x => x.RoomId == roomId).Count();
             roomMap.QuantityParticipant = quantity;
 
@@ -132,7 +147,11 @@ namespace PartyRoom.Core.Services
 
         public async Task<IEnumerable<RoomItemDTO>> GetRoomsAsync(Guid userId)
         {
-            var rooms = _userRoomRepository.Models.Where(x => x.UserId == userId).Select(x => x.Room).OrderBy(x => x.StartDate).OrderBy(x => x.IsStarted);
+            var rooms = _userRoomRepository.Models
+                .Where(x => x.UserId == userId)
+                .Select(x => x.Room)
+                .OrderBy(x => x.StartDate)
+                .ThenBy(x => x.IsStarted);
             var roomsMap = _mapper.Map<List<RoomItemDTO>>(rooms);
             return roomsMap;
         }
@@ -182,6 +201,7 @@ namespace PartyRoom.Core.Services
                 {
                     randomIndex = (randomIndex + 1) % availableDestinations.Count;
                 }
+                userRoom.DestinationUserId = availableDestinations[randomIndex];
                 availableDestinations.RemoveAt(randomIndex);
             }
             foreach (var item in userRooms)
@@ -287,6 +307,21 @@ namespace PartyRoom.Core.Services
             var userRoom = new UserRoom { Room = room, UserId = userId };
             await _userRoomRepository.AddAsync(userRoom);
             await _userRoomRepository.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<UserPublicDTO>> GetUsersFromRoomAsync(Guid roomId)
+        {
+            var usersId = _userRoomRepository.Models.Where(x => x.RoomId == roomId).Select(x => x.UserId).ToList();
+
+            var profiles = new List<UserPublicDTO>();
+            foreach (var id in usersId)
+            {
+                var userFind = await _profileRepository.GetUserByIdAsync(id);
+                var userMap = _mapper.Map<UserPublicDTO>(userFind);
+                profiles.Add(userMap);
+            }
+
+            return profiles;
         }
     }
 }

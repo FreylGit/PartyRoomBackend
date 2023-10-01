@@ -12,6 +12,7 @@ namespace PartyRoom.Core.Interfaces.Services
         Task DeleteTagAsync(Guid userId, Guid tagId);
         Task<UserDTO> GetProfileAsync(Guid id);
         Task<UserPublicDTO> GetProfilePublicAsync(Guid id);
+        Task<UserPublicDTO> GetProfilePublicAsync(string username);
         Task UpdateImageAsync(Guid userId, IFormFile image);
         Task UpdateProfileAsync(UserProfileUpdateDTO userProfile, Guid userId);
     }
