@@ -147,14 +147,37 @@ namespace PartyRoom.Core.Services
 
         public async Task<IEnumerable<RoomItemDTO>> GetRoomsAsync(Guid userId)
         {
-            var rooms = _userRoomRepository.Models
+            var roomsQuery = _userRoomRepository.Models
                 .Where(x => x.UserId == userId)
                 .Select(x => x.Room)
                 .OrderBy(x => x.StartDate)
                 .ThenBy(x => x.IsStarted);
-            var roomsMap = _mapper.Map<List<RoomItemDTO>>(rooms);
+
+            var roomsMap = await _mapper.ProjectTo<RoomItemDTO>(roomsQuery).ToListAsync();
+
+            var roomIds = roomsMap.Select(x => x.Id).ToList();
+
+            var quantityMap = await _userRoomRepository.Models
+                .Where(x => roomIds.Contains(x.RoomId))
+                .GroupBy(x => x.RoomId)
+                .Select(group => new { RoomId = group.Key, Quantity = group.Count() })
+                .ToDictionaryAsync(x => x.RoomId, x => x.Quantity);
+
+            foreach (var roomItem in roomsMap)
+            {
+                if (quantityMap.TryGetValue(roomItem.Id, out var quantity))
+                {
+                    roomItem.QuantityParticipant = quantity;
+                }
+                else
+                {
+                    roomItem.QuantityParticipant = 0;
+                }
+            }
+
             return roomsMap;
         }
+
 
         private async Task<string> GenerateUniqueSlug()
         {

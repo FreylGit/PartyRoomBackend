@@ -13,6 +13,9 @@ namespace PartyRoom.Core.DTOs.Room
 
         public bool IsStarted { get; set; }
 
+        public int QuantityParticipant { get; set; }
+
+
         public DateTime StartDate { get; set; }
 
         public DateTime FinishDate { get; set; }
