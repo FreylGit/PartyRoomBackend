@@ -79,7 +79,6 @@ namespace PartyRoom.WebAPI.Controllers
         [Authorize(RoleConstants.RoleUser)]
         public async Task<IActionResult> DisconnectUser(Guid roomId,Guid? participantId)
         {
-            //TODO: Добавить дисконект по username
             var userId = _jwtService.GetUserIdByToken(HttpContext);
             if (participantId != null)
             {

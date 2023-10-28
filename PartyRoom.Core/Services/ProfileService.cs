@@ -113,6 +113,15 @@ namespace PartyRoom.Core.Services
             {
                 throw new ArgumentNullException("Полфиль пустой");
             }
+            //TODO Протестить
+            var tags = userProfile.NewTags;
+
+            if (tags != null)
+            {
+                await AddTagAsync(userId, tags);
+            }
+           
+           
 
             var profile = _mapper.Map<UserProfile>(userProfile);
             profile.ApplicationUserId = userId;
@@ -131,3 +140,4 @@ namespace PartyRoom.Core.Services
         }
     }
 }
+

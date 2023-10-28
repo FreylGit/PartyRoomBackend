@@ -68,6 +68,10 @@ namespace PartyRoom.Core.Services
             {
                 throw new ArgumentNullException("Ссылка на комнату недействительна");
             }
+            if (room.IsStarted)
+            {
+                throw new InvalidOperationException("Комната уже запущено");
+            }
             if (await _userRoomRepository.ConsistsUserAsync(userId, room.Id))
             {
                 throw new InvalidOperationException("Пользователь уже состоит в этой комнате");
@@ -120,8 +124,7 @@ namespace PartyRoom.Core.Services
 
             if (!await _userRoomRepository.ExistsAsync(userId, roomId))
             {
-                //TODO: Ошибку
-                return null;
+                throw new ArgumentNullException();
             }
             var room = await _roomRepository.GetByIdAsync(roomId);
             var roomMap = _mapper.Map<RoomInfoDTO>(room);

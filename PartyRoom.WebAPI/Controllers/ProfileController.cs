@@ -70,7 +70,7 @@ namespace PartyRoom.WebAPI.Controllers
 
         [HttpPut("Update")]
         [Authorize(RoleConstants.RoleUser)]
-        public async Task<IActionResult> UpdateAbout(UserProfileUpdateDTO updateProfile)
+        public async Task<IActionResult> UpdateAbout([FromBody]UserProfileUpdateDTO updateProfile)
         {
             var userId = _jwtService.GetUserIdByToken(HttpContext);
             await _profileService.UpdateProfileAsync(updateProfile, userId);

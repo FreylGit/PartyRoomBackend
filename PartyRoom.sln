@@ -11,6 +11,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PartyRoom.Core", "PartyRoom
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PartyRoom.Contracts", "PartyRoom.Contracts\PartyRoom.Contracts.csproj", "{86E62409-754D-494E-89E0-45698D36A9D9}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{D0EB2FDA-C078-4C09-8D82-68A16CCD11E3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PartyRoom.Test", "PartyRoom.Test\PartyRoom.Test.csproj", "{9C0FA744-73E8-474A-90BD-378F4F0C83FD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,11 +37,18 @@ Global
 		{86E62409-754D-494E-89E0-45698D36A9D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{86E62409-754D-494E-89E0-45698D36A9D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{86E62409-754D-494E-89E0-45698D36A9D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C0FA744-73E8-474A-90BD-378F4F0C83FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C0FA744-73E8-474A-90BD-378F4F0C83FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C0FA744-73E8-474A-90BD-378F4F0C83FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C0FA744-73E8-474A-90BD-378F4F0C83FD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {742FEC84-6D0E-4E47-9400-C32BF9E1B0E5}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{9C0FA744-73E8-474A-90BD-378F4F0C83FD} = {D0EB2FDA-C078-4C09-8D82-68A16CCD11E3}
 	EndGlobalSection
 EndGlobal
